@@ -11,29 +11,17 @@
     ~/.Xresources: Xresources
     ~/.xinitrc: xinitrc
     ~/.config/nvim:
-      create: true
-      path: config/nvim
+        create: true
+        path: config/nvim
     ~/.config/bspwm:
-      create: true
-      path: config/bspwm
+        create: true
+        path: config/bspwm
     ~/.config/polybar:
-      create: true
-      path: config/polybar
+        create: true
+        path: config/polybar
     ~/.config/sxhkd:
-      create: true
-      path: config/polybar
-- clean: ['~']
-
-- link:
-
-
-- clean: ['~']
-
-- link:
-
-
-- clean: ['~']
-
-- link:
-
-
+        create: true
+        path: config/polybar
+    ~/.config/alacritty:
+        create: true
+        path: config/alacritty
