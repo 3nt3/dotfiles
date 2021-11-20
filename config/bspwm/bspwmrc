@@ -1,0 +1,67 @@
+#!/bin/sh
+export _JAVA_AWT_WM_NONREPARENTING=1
+export QT_QPA_PLATFORMTHEME=qt5ct
+export GDK_DPI_SCALE=1.3
+
+killall dunst
+dunst &
+
+
+killall sxhkd
+sxhkd &
+
+bspc monitor DisplayPort-2 -d www chat mail 4 5 6 7 passwd music 10
+bspc monitor HDMI-A-0 -d 11 12 13 14 15 16 17 18 19 20
+
+xrandr --output HDMI-A-0 --auto
+xrandr --dpi 130 \
+    --output DisplayPort-2 --mode 3840x2160 --scale 0.9999x0.9999 \
+    --output HDMI-A-0 --scale 1.9999x1.9999 --right-of DisplayPort-2 --rotate right
+
+
+bspc config top_padding 50
+bspc config window_gap 30
+bspc config split_ratio 0.50
+bspc config border_width 4
+
+bspc config -m HDMI-A-0 top_padding 0
+
+setxkbmap -variant altgr-intl
+setxkbmap -option caps:swapescape
+
+feh --bg-fill ~/Pictures/wallpapers/macos-5k.jpg
+# xsetroot -solid black
+
+xset r rate 250 60
+
+# rules for certain applications
+bspc rule -a Zathura:\* state=tiled
+bspc rule -a mpv:\* state=floating
+bspc rule -a Emacs:\* state=tiled
+
+killall bspwm_window_titles
+while pgrep -u $UID -f bspwm_window_titles >/dev/null; do pkill -f bspwm_window_titles; done
+/home/ente/.local/bin/bspwm_window_titles &
+
+eval $(gnome-keyring-daemon --start)
+export SSH_AUTH_SOCK
+
+# for some reason protonvpn does not work without this
+nm-applet &
+
+killall polybar
+~/.config/polybar/launch.sh &
+
+killall picom
+picom --experimental-backends &
+
+nextcloud &
+
+# thunar --daemon &
+
+killall discover-overlay;
+discover-overlay &
+
+emacs --daemon &
+
+(/home/ente/src/3nt3/usage_tracker/tracker.py ~/.local/share/usage.csv > /tmp/usage_tracker.log)
