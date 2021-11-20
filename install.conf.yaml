@@ -10,18 +10,23 @@
     ~/.zshrc: zshrc
     ~/.Xresources: Xresources
     ~/.xinitrc: xinitrc
-    ~/.config/nvim/*:
+    ~/.config/nvim:
       create: true
       path: config/nvim
-    ~/.config/bspwm/*:
+    ~/.config/bspwm:
       create: true
       path: config/bspwm
-    ~/.config/polybar/*:
+    ~/.config/polybar:
       create: true
       path: config/polybar
-    ~/.config/sxhkd/*:
+    ~/.config/sxhkd:
       create: true
       path: config/polybar
+- clean: ['~']
+
+- link:
+
+
 - clean: ['~']
 
 - link:
