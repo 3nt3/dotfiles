@@ -21,10 +21,16 @@
       path: config/polybar
     ~/.config/sxhkd:
       create: true
-      path: config/polybar
+      path: config/sxhkd
     ~/.config/alacritty:
       create: true
       path: config/alacritty
+    ~/.config/mpd:
+      create: true
+      path: config/mpd
+    ~/.config/ncmpcpp:
+      create: true
+      path: config/ncmpcpp
     ~/.config/qutebrowser/config.py:
       reate: true
       path: config/qutebrowser/config.py
