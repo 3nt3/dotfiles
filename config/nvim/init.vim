@@ -273,3 +273,4 @@ let g:flutter_hot_reload_on_save = 1
 " autocmd FileType tex setl updatetime=1
 let g:livepreview_previewer = 'zathura'
 
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab " two tabs for yaml
