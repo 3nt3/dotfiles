@@ -6,5 +6,6 @@
       "rootPatterns": ["elm.json"]
     }
   },
-  "codeLens.enable": true
+  "codeLens.enable": true,
+  "coc.preferences.formatOnSaveFiletypes":  ["*"]
 }

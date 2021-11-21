@@ -20,6 +20,8 @@ Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'morhetz/gruvbox'
 
+Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' } " for LaTeX
+
 Plug 'HerringtonDarkholme/yats.vim' " TS Syntax
 
 Plug 'andys8/vim-elm-syntax' " elm syntax 
@@ -191,7 +193,7 @@ nmap <leader>f  <Plug>(coc-format-selected)
 
 augroup mygroup
   autocmd!
-  " Setup formatexpr specified filetype(s).
+  " Setup formattexexpr specified filetype(s).
   autocmd FileType typescript,json,elm setl formatexpr=CocAction('formatSelected')
   " Update signature help on jump placeholder
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
@@ -267,3 +269,7 @@ colorscheme sonokai
 
 " hot-reload on save
 let g:flutter_hot_reload_on_save = 1
+
+" autocmd FileType tex setl updatetime=1
+let g:livepreview_previewer = 'zathura'
+
