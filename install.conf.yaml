@@ -31,6 +31,12 @@
     ~/.config/ncmpcpp:
       create: true
       path: config/ncmpcpp
+    ~/.config/mpv:
+      create: true
+      path: config/mpv
+    ~/.config/zathura:
+      create: true
+      path: config/zathura
     ~/.config/qutebrowser/config.py:
       reate: true
       path: config/qutebrowser/config.py
