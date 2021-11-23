@@ -1,7 +1,7 @@
 set encoding=UTF-8
 
-let mapleader = ","
-let localmapleader = "\<Space>"
+let mapleader = "\<Space>"
+let localmapleader = ","
 
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
@@ -270,7 +270,12 @@ colorscheme sonokai
 " hot-reload on save
 let g:flutter_hot_reload_on_save = 1
 
+nmap <Leader>w :w<CR>
+nmap <Leader>cr :source ~/.config/nvim/init.vim<CR>
+nmap <Leader>ce :tabedit ~/.config/nvim/init.vim<CR>
+
 " autocmd FileType tex setl updatetime=1
 let g:livepreview_previewer = 'zathura'
+let g:livepreview_cursorhold_recompile = 0 " only recompile on save 
 
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab " two tabs for yaml
