@@ -43,7 +43,7 @@ killall bspwm_window_titles
 while pgrep -u $UID -f bspwm_window_titles >/dev/null; do pkill -f bspwm_window_titles; done
 /home/ente/.local/bin/bspwm_window_titles &
 
-eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh) export SSH_AUTH_SOCK
+/usr/bin/gnome-keyring-daemon --start --components=ssh,secrets,pkcs11
 
 # for some reason protonvpn does not work without this
 nm-applet &
