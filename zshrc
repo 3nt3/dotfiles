@@ -1,4 +1,4 @@
-fastfetch
+neofetch
 # neofetch --ascii "$(cat ~/Pictures/anarchy.txt)"
 # I you come from bash you might have to change your $PATH.
 #
@@ -13,6 +13,7 @@ bindkey -v
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="afowler"
+# PROMPT="$ "
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -74,7 +75,7 @@ DISABLE_AUTO_TITLE="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git fzf autojump stack command-not-found colored-man-pages zsh-syntax-highlighting flutter jump)
+plugins=(git fzf stack command-not-found colored-man-pages zsh-syntax-highlighting flutter jump npm nix-zsh-completions nix-shell)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -106,9 +107,11 @@ export EDITOR='nvim'
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
-export PATH=~/.npm-global/bin:~/.local/bin:~/.emacs.d/bin:~/.ghcup/bin:$PATH
+export PATH=~/.local/share/npm-global/bin:~/.local/bin:~/.emacs.d/bin:~/.ghcup/bin:$PATH
 
 export ANDROID_HOME=/home/ente/Android/Sdk
+
+alias ls='exa'
 
 alias gs='git status'
 alias pamcan='pacman'
@@ -162,6 +165,7 @@ subs() {
 
 alias td="todo"
 alias thu="thunar . &; disown"
+alias python="python3"
 
 ix() {
     local opts
@@ -204,6 +208,7 @@ if [[ "$TERM" == (Eterm*|alacritty*|aterm*|gnome*|konsole*|kterm*|putty*|rxvt*|s
 	add-zsh-hook -Uz precmd xterm_title_precmd
 	add-zsh-hook -Uz preexec xterm_title_preexec
 fi
-eval "$(luarocks path)"
 
+export GPG_TTY=$(tty)
 
+alias pwlo-on='pw-link "alsa_input.usb-Thomann_SC450USB-00.analog-stereo:capture_FL" "alsa_output.pci-0000_0a_00.4.analog-stereo:playback_FR; pw-link "alsa_input.usb-Thomann_SC450USB-00.analog-stereo:capture_FL" "alsa_output.pci-0000_0a_00.4.analog-stereo:playback_FL'

@@ -43,6 +43,12 @@ Plug 'junegunn/fzf.vim'
 Plug 'archseer/colibri.vim'
 Plug 'sainnhe/sonokai'
 
+Plug 'LnL7/vim-nix' "nix syntax highlighting?
+
+Plug 'evanleck/vim-svelte'
+Plug 'pangloss/vim-javascript'
+Plug 'HerringtonDarkholme/yats.vim'
+
 " Initialize plugin system
 call plug#end()
 
@@ -265,7 +271,7 @@ let g:dart_format_on_save = 1
 
 set termguicolors
 set background=dark
-colorscheme sonokai
+colorscheme gruvbox
 
 " hot-reload on save
 let g:flutter_hot_reload_on_save = 1
@@ -276,6 +282,8 @@ nmap <Leader>ce :tabedit ~/.config/nvim/init.vim<CR>
 
 " autocmd FileType tex setl updatetime=1
 let g:livepreview_previewer = 'zathura'
-let g:livepreview_cursorhold_recompile = 0 " only recompile on save 
+let g:livepreview_cursorhold_recompile = 1 
 
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab " two tabs for yaml
+
+autocmd FileType svelte setlocal ts=2 sts=2 sw=2 expandtab " two tabs for yaml

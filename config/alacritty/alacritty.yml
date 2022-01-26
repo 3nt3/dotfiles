@@ -5,9 +5,9 @@ env:
 dynamic_title: true
 font:
   normal:
-    family: FiraCode Nerd Font
+    family: Fira Code
     style: Regular
-  size: 12
+  size: 11
   use_thin_strokes: true
 colors:
   name: Atelierseaside (dark)
@@ -36,5 +36,4 @@ colors:
     magenta: "#ad2bee"
     cyan: "#1999b3"
     white: "#f0fff0"
-background_opacity: 1
-opacity: 1
+background_opacity: 0.9

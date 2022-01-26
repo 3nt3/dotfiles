@@ -3,3 +3,6 @@ Host 3nt3
 
 Host teich
     HostName teich.3nt3.de
+
+Host vm100
+    HostName 192.168.178.193

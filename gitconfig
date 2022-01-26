@@ -1,10 +1,12 @@
 [user]
 	email = gott@3nt3.de
 	name = 3nt3
-	signingkey = 0E7CD1EB9D4F92735B243D87E8A8E10DCB38E9BC
+	signingkey = 36CC4B2F
 [commit]
-	gpgsign = yes
+	gpgsign = true
 [init]
 	defaultBranch = main
 [pull]
 	rebase = false
+[gpg]
+	program = gpg

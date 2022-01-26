@@ -37,6 +37,9 @@
     ~/.config/zathura:
       create: true
       path: config/zathura
+    ~/.config/sway:
+      create: true
+      path: config/sway
     ~/.config/qutebrowser/config.py:
       reate: true
       path: config/qutebrowser/config.py

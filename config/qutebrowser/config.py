@@ -1,7 +1,14 @@
 config.load_autoconfig()
 
+config.bind(',m', 'spawn mpv {url}', mode='normal')
+config.bind(',M', 'hint links spawn mpv {hint-url}', mode='normal')
+config.bind(',r', 'config-source')
+
 config.bind('<Alt-Shift-u>', 'spawn --userscript qute-keepassxc --key 0E7CD1EB9D4F92735B243D87E8A8E10DCB38E9BC', mode='insert')
 config.bind('pw', 'spawn --userscript qute-keepassxc --key 0E7CD1EB9D4F92735B243D87E8A8E10DCB38E9BC', mode='normal')
+
+config.bind(',f', 'fake-key f')
+# config.bind('<Space><Space>', 'fake-key f')
 
 # base16-qutebrowser (https://github.com/theova/base16-qutebrowser)
 # Base16 qutebrowser template by theova
@@ -23,6 +30,8 @@ base0C = "#149bda"
 base0D = "#796af5"
 base0E = "#bb60ea"
 base0F = "#c720ca"
+
+c.content.blocking.adblock.lists = ['https://easylist.to/easylist/easylist.txt', 'https://easylist.to/easylist/easyprivacy.txt', 'https://easylist-downloads.adblockplus.org/easylistdutch.txt', 'https://easylist-downloads.adblockplus.org/abp-filters-anti-cv.txt', 'https://www.i-dont-care-about-cookies.eu/abp/', 'https://secure.fanboy.co.nz/fanboy-cookiemonster.txt']
 
 # set qutebrowser colors
 
@@ -305,3 +314,7 @@ c.colors.tabs.selected.even.bg = "#6c5ce7"
 # Background color for webpages if unset (or empty to use the theme's
 # color).
 # c.colors.webpage.bg = base00
+
+c.fonts.default_size = '12pt'
+c.tabs.position = 'left'
+c.tabs.width = '10%'

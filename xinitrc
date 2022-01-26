@@ -1,1 +1,1 @@
-exec bspwm
+exec startplasma-x11

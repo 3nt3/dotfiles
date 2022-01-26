@@ -1,0 +1,5 @@
+start=6946.314000
+vf=@autocrop-crop:lavfi-crop=w=1840:h=756:x=0:y=0
+aid=1
+sid=1
+sub-scale=0.400000
