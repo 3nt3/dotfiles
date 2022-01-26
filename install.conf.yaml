@@ -43,3 +43,6 @@
     ~/.config/qutebrowser/config.py:
       reate: true
       path: config/qutebrowser/config.py
+    ~/.config/nwg-drawer/drawer.css:
+      create: true
+      path: config/nwg-drawer/drawer.css
