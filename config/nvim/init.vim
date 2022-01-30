@@ -260,7 +260,8 @@ autocmd FileType haskell nnoremap <buffer> <leader>? :call ale#cursor#ShowCursor
 
 let g:lsc_auto_map = v:true
 
-nmap ; :Files<CR>
+nmap ; :GFiles<CR>
+autocmd! FileType fzf tnoremap <buffer> <esc> <c-c>
 
 " ts = 'number of spaces that <Tab> in file uses' sts = 'number of spaces that <Tab> uses while editing' sw = 'number of spaces to use for (auto)indent step' for details see: vimdoc.sourceforge.net/htmldoc/quickref.html#option-list – 
 " --zdsbs on stackoverflow (https://stackoverflow.com/questions/1562633/setting-vim-whitespace-preferences-by-filetype)
