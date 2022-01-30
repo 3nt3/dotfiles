@@ -5,7 +5,7 @@ env:
 dynamic_title: true
 font:
   normal:
-    family: Fira Code
+    family: Fira Code Nerd Font
     style: Regular
   size: 11
   use_thin_strokes: true

@@ -287,3 +287,6 @@ let g:livepreview_cursorhold_recompile = 1
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab " two tabs for yaml
 
 autocmd FileType svelte setlocal ts=2 sts=2 sw=2 expandtab " two tabs for yaml
+
+" allow exiting terminal using <Esc>
+tnoremap <Esc> <C-\><C-n>
