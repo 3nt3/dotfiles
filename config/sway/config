@@ -25,6 +25,9 @@ seat seat0 xcursor_theme Adwaita 24
 
 exec dex -a &
 
+exec oguri &
+exec swayblur -b 10 &
+
 exec export QT_QPA_PLATFORM=wayland
 exec export MOZ_ENABLE_WAYLAND=1
 exec export _JAVA_AWT_WM_NONREPARENTING=1
@@ -62,9 +65,9 @@ default_floating_border pixel 4
 #
 # Default wallpaper (more resolutions are available in /run/current-system/sw/share/backgrounds/sway/)
 # output * bg /run/current-system/sw/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
-output * bg ~/Pictures/wallpaper.jpg fill
+# output * bg ~/Pictures/wallpaper.jpg fill
 
-gaps inner 10
+gaps inner 0
 
 #
 # Example configuration:
