@@ -7,8 +7,7 @@
     }
   },
   "codeLens.enable": true,
-  "coc.preferences.formatOnSaveFiletypes": [
-    "*"
-  ],
-  "svelte.enable-ts-plugin": true
+  "coc.preferences.formatOnSaveFiletypes": ["*"],
+  "svelte.enable-ts-plugin": true,
+  "diagnostic.checkCurrentLine": true
 }
