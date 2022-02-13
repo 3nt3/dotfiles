@@ -318,3 +318,5 @@ c.colors.tabs.selected.even.bg = "#6c5ce7"
 c.fonts.default_size = '12pt'
 c.tabs.position = 'left'
 c.tabs.width = '10%'
+
+config.bind(";1", "hint inputs --first")

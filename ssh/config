@@ -6,3 +6,7 @@ Host teich
 
 Host vm100
     HostName 192.168.178.193
+
+Host pve
+    HostName pve
+    User root

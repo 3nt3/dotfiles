@@ -7,7 +7,7 @@ let localmapleader = ","
 call plug#begin('~/.vim/plugged')
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'scrooloose/nerdtree'
+Plug 'jistr/vim-nerdtree-tabs'
 "Plug 'tsony-tsonev/nerdtree-git-plugin'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
@@ -53,7 +53,7 @@ Plug 'HerringtonDarkholme/yats.vim'
 call plug#end()
 
 inoremap jk <ESC>
-nmap <C-n> :NERDTreeToggle<CR>
+nmap <C-n> <plug>NERDTreeTabsToggle<CR>
 vmap ++ <plug>NERDCommenterToggle
 nmap ++ <plug>NERDCommenterToggle
 
@@ -291,3 +291,8 @@ autocmd FileType svelte setlocal ts=2 sts=2 sw=2 expandtab " two tabs for yaml
 
 " allow exiting terminal using <Esc>
 tnoremap <Esc> <C-\><C-n>
+
+set splitbelow
+set splitright
+
+nmap <Leader>l :LLPStartPreview<CR>
