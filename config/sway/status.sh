@@ -2,22 +2,18 @@
 # You should see changes to the status bar after saving this script.
 # If not, do "killall swaybar" and $mod+Shift+c to reload the configuration.
 
-# Produces "21 days", for example
-uptime_formatted="up $(uptime | cut -d ',' -f1  | cut -d ' ' -f6)"
-
-# The abbreviated weekday (e.g., "Sat"), followed by the ISO-formatted date
-# like 2018-10-06 and the time (e.g., 14:01:32)
-date_formatted=$(date "+%a %F %H:%M:%S")
-
-# Get the Linux version but remove the "-1-ARCH" part
-linux_version=$(uname -r | cut -d '-' -f1)
 
 # Returns the battery status: "Full", "Discharging", or "Charging".
+volume=$(pamixer --get-volume-human)
+
 battery_status=$(cat /sys/class/power_supply/BAT0/status)
+battery_capacity=$(cat /sys/class/power_supply/BAT0/capacity)
+
+date_fmt=$(date --rfc-3339=seconds | cut -c 1-19)
 
 # porn_folder=$(du -sh ~)
 
 # Emojis and characters for the status bar
 #     ⚡  \|
-echo  $uptime_formatted ↑ linux v$linux_version '|' $date_formatted
+echo "BL: $(light)% | VOL: $volume | ⚡$battery_status $battery_capacity% | $date_fmt"
 

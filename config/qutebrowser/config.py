@@ -380,7 +380,7 @@ c.tabs.position = 'left'
 # Width (in pixels or as percentage of the window) of the tab bar if
 # it's vertical.
 # Type: PercOrInt
-c.tabs.width = '10%'
+c.tabs.width = 200
 
 # Minimum width (in pixels) of tabs (-1 for the default minimum size
 # behavior). This setting only applies when tabs are horizontal. This
@@ -391,7 +391,7 @@ c.tabs.min_width = -1
 
 # Default zoom level.
 # Type: Perc
-c.zoom.default = '130'
+c.zoom.default = '100'
 
 # Text color of the completion widget. May be a single color to use for
 # all columns or a list of three colors, one for each column.
@@ -780,7 +780,7 @@ c.colors.webpage.preferred_color_scheme = 'dark'
 # either a float value with a "pt" suffix, or an integer value with a
 # "px" suffix.
 # Type: String
-c.fonts.default_size = '12pt'
+c.fonts.default_size = '10pt'
 
 # Bindings for normal mode
 config.bind(',M', 'hint links spawn mpv {hint-url}')

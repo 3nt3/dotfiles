@@ -11,11 +11,19 @@ input * {
     xkb_variant "altgr-intl"
 }
 
+input type:touchpad {
+    tap enabled
+    natural_scroll enabled
+}
+
+
 input * repeat_delay 300
 input * repeat_rate 50
 
 # set cursor theme
 seat seat0 xcursor_theme Adwaita 24
+
+exec dex -a &
 
 exec export QT_QPA_PLATFORM=wayland
 exec export MOZ_ENABLE_WAYLAND=1
@@ -26,6 +34,8 @@ exec export SSH_AUTH_SOCK
 
 exec_always thunar --daemon &
 exec_always exec_always nwg-drawer -r &
+exec_always xss-lock -- swaylock -c 000000 &
+exec swaync &
 
 ### Variables
 #
@@ -42,7 +52,7 @@ set $term alacritty
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 # set $menu dmenu_path | dmenu | xargs swaymsg exec --
-set $menu nwg-drawer --nofs
+set $menu sh -c 'rofi -combi-modi window,drun,ssh -theme solarized -font "hack 12" -show combi -icon-theme "Papirus" -show-icons'
 
 default_border pixel 4
 default_floating_border pixel 4
@@ -93,11 +103,11 @@ workspace 20 output HDMI-A-1
 #
 # Example configuration:
 #
-# exec swayidle -w \
-#          timeout 300 'swaylock -f -c 000000' \
-#          timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-#          before-sleep 'swaylock -f -c 000000'
-#
+exec swayidle -w \
+         timeout 300 'swaylock -f -c 000000' \
+         timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+         before-sleep 'swaylock -f -c 000000'
+
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
@@ -143,8 +153,15 @@ workspace 20 output HDMI-A-1
     bindsym $mod+Shift+y exec grim -g "$(slurp)" ~/Pictures/screenshots/$(date --iso-8601=seconds).png
 
     # volume
-    bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
-    bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+    bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +1%
+    bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -1%
+    bindsym XF86AudioMute exec pamixer -t
+
+    # backlight
+    bindsym XF86MonBrightnessUp exec sudo light -A 2
+    bindsym XF86MonBrightnessDown exec sudo light -U 2
+
+    bindsym XF86Display exec wdisplays &
 
 
     # Drag floating windows by holding down $mod and left mouse button.
@@ -307,16 +324,16 @@ bar {
     # When the status_command prints a new line to stdout, swaybar updates.
     # The default just shows the current date and time.
     # status_command while date --rfc-3339=s | cut -c -19; do sleep 1; done
-    status_command while ~/.config/sway/status.sh; do sleep 1; done
+    status_command while ~/.config/sway/status.sh; do sleep 0.05; done
 
 
     colors {
-        statusline #ffffff
-        background #323232
+        statusline #eeeeee
+        background #222222
         inactive_workspace #32323200 #32323200 #5c5c5c
     }
 
-    font pango:DejaVu Sans Mono 12
+    font pango:Hack 11
 }
 
 include /etc/sway/config.d/*
