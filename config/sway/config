@@ -4,6 +4,7 @@
 #
 # Read `man 5 sway` for a complete reference.
 
+
 # set keyboard layout
 input * {
     xkb_layout "us"
@@ -25,6 +26,12 @@ seat seat0 xcursor_theme Adwaita 24
 
 exec dex -a &
 
+exec_always {
+  gsettings set org.gnome.desktop.interface gtk-theme "Plata-Noir-Compact"
+  gsettings set org.gnome.desktop.interface icon-theme "Papirus-Dark"
+}
+
+exec_always systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec export QT_QPA_PLATFORM=wayland
 exec export MOZ_ENABLE_WAYLAND=1
 exec export _JAVA_AWT_WM_NONREPARENTING=1
@@ -99,14 +106,16 @@ workspace 18 output HDMI-A-1
 workspace 19 output HDMI-A-1
 workspace 20 output HDMI-A-1
 
+assign [class="Spotify"] 9
+assign [class="discord"] 2
+
 ### Idle configuration
 #
 # Example configuration:
 #
+for_window [shell=".*"] inhibit_idle fullscreen # not turn off while watching video
 exec swayidle -w \
-         timeout 300 'swaylock -f -c 000000' \
-         timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-         before-sleep 'swaylock -f -c 000000'
+     before-sleep 'swaylock -f -c 000000'
 
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
@@ -162,6 +171,8 @@ exec swayidle -w \
     bindsym XF86MonBrightnessDown exec sudo light -U 2
 
     bindsym XF86Display exec wdisplays &
+
+    bindsym XF86AudioMicMute exec pactl set-source-mute alsa_input.pci-0000_04_00.6.analog-stereo toggle
 
 
     # Drag floating windows by holding down $mod and left mouse button.
@@ -324,7 +335,7 @@ bar {
     # When the status_command prints a new line to stdout, swaybar updates.
     # The default just shows the current date and time.
     # status_command while date --rfc-3339=s | cut -c -19; do sleep 1; done
-    status_command while ~/.config/sway/status.sh; do sleep 0.05; done
+    status_command while ~/.config/sway/status.sh; do sleep 10; done
 
 
     colors {

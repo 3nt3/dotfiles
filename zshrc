@@ -238,3 +238,6 @@ function command_not_found_handler {
     fi
 }
 
+chpwd() l
+
+export XDG_CURRENT_DESKTOP=sway

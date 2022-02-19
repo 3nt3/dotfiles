@@ -15,6 +15,10 @@ Plug 'airblade/vim-gitgutter'
 Plug 'ctrlpvim/ctrlp.vim' " fuzzy find files
 Plug 'scrooloose/nerdcommenter'
 Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+Plug 'lervag/vimtex'
+
+Plug 'scrooloose/nerdtree'
+Plug 'pineapplegiant/spaceduck', { 'branch': 'main' }
 
 Plug 'christoomey/vim-tmux-navigator'
 
@@ -272,7 +276,10 @@ let g:dart_format_on_save = 1
 
 set termguicolors
 set background=dark
-colorscheme gruvbox
+colorscheme spaceduck
+" hi Normal guibg=NONE ctermbg=NONE
+let g:airline_theme='spaceduck'
+
 
 " hot-reload on save
 let g:flutter_hot_reload_on_save = 1
