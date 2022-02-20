@@ -46,3 +46,6 @@
     ~/.config/nwg-drawer/drawer.css:
       create: true
       path: config/nwg-drawer/drawer.css
+    ~/.config/kitty/kitty.conf:
+      create: true
+      path: config/kitty/kitty.conf
