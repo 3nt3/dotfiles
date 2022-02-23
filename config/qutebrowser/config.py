@@ -391,7 +391,7 @@ c.tabs.min_width = -1
 
 # Default zoom level.
 # Type: Perc
-c.zoom.default = '100'
+c.zoom.default = '130'
 
 # Text color of the completion widget. May be a single color to use for
 # all columns or a list of three colors, one for each column.
@@ -780,7 +780,7 @@ c.colors.webpage.preferred_color_scheme = 'dark'
 # either a float value with a "pt" suffix, or an integer value with a
 # "px" suffix.
 # Type: String
-c.fonts.default_size = '10pt'
+c.fonts.default_size = '14pt'
 
 # Bindings for normal mode
 config.bind(',M', 'hint links spawn mpv {hint-url}')

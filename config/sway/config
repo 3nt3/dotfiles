@@ -35,10 +35,12 @@ exec export _JAVA_AWT_WM_NONREPARENTING=1
 exec eval $(gnome-keyring-daemon --start)
 exec export SSH_AUTH_SOCK
 
+exec_always export XDG_CURRENT_DESKTOP=sway
+exec_always  systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec_always thunar --daemon &
-exec_always exec_always nwg-drawer -r &
 exec_always xss-lock -- swaylock -c 000000 &
 exec swaync &
+exec waybar &
 
 ### Variables
 #
@@ -50,7 +52,7 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-set $term alacritty
+set $term kitty
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
@@ -106,10 +108,6 @@ workspace 20 output HDMI-A-1
 #
 # Example configuration:
 #
-exec swayidle -w \
-         timeout 300 'swaylock -f -c 000000' \
-         timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-         before-sleep 'swaylock -f -c 000000'
 
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
@@ -253,6 +251,9 @@ exec swayidle -w \
     bindsym $mod+Shift+F10 move container to workspace number 20
 
     bindsym $mod+Tab workspace back_and_forth
+
+    bindsym $mod+bracketleft workspace prev
+    bindsym $mod+bracketright workspace next
     # Note: workspaces can have any name you want, not just numbers.
     # We just use 1-10 as the default.
 #
@@ -321,22 +322,6 @@ bindsym $mod+r mode "resize"
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
-bar {
-    position top
 
-    # When the status_command prints a new line to stdout, swaybar updates.
-    # The default just shows the current date and time.
-    # status_command while date --rfc-3339=s | cut -c -19; do sleep 1; done
-    status_command while ~/.config/sway/status.sh; do sleep 0.05; done
-
-
-    colors {
-        statusline #eeeeee
-        background #222222
-        inactive_workspace #32323200 #32323200 #5c5c5c
-    }
-
-    font pango:Hack 11
-}
 
 include /etc/sway/config.d/*

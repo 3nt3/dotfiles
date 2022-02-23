@@ -14,9 +14,11 @@ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'airblade/vim-gitgutter'
 Plug 'ctrlpvim/ctrlp.vim' " fuzzy find files
 Plug 'scrooloose/nerdcommenter'
-Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+Plug 'preservim/nerdtree'
+Plug 'tomasiser/vim-code-dark'
 
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'mattn/emmet-vim'
 
 Plug 'morhetz/gruvbox'
 
@@ -29,7 +31,6 @@ Plug 'andys8/vim-elm-syntax' " elm syntax
 Plug 'drewtempelmeyer/palenight.vim'
 Plug 'ryanoasis/vim-devicons'
 
-Plug 'w0rp/ale'
 Plug 'vim-airline/vim-airline'
 Plug 'eagletmt/ghcmod-vim'
 Plug 'Shougo/vimproc'
@@ -78,17 +79,7 @@ let g:NERDTreeGitStatusWithFlags = 1
 
 let g:NERDTreeIgnore = ['^node_modules$']
 
-" vim-prettier
-let g:prettier#quickfix_enabled = 1
-"let g:prettier#quickfix_auto_focus = 0
-" prettier command for coc
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
-" run prettier on save
-let g:prettier#autoformat = 0
-"autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html PrettierAsync
-Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html', 'dart']}
+autocmd FileType typescriptreact :setlocal sw=2 ts=2 sts=2
 
 
 " ctrlp
@@ -221,8 +212,8 @@ omap if <Plug>(coc-funcobj-i)
 omap af <Plug>(coc-funcobj-a)
 
 " Use <C-d> for select selections ranges, needs server support, like: coc-tsserver, coc-python
-nmap <silent> <C-d> <Plug>(coc-range-select)
-xmap <silent> <C-d> <Plug>(coc-range-select)
+" nmap <silent> <C-d> <Plug>(coc-range-select)
+" xmap <silent> <C-d> <Plug>(coc-range-select)
 
 " Use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')
@@ -254,9 +245,6 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
-" haskell things
-let g:airline#extensions#ale#enabled = 1
-autocmd FileType haskell nnoremap <buffer> <leader>? :call ale#cursor#ShowCursorDetail()<cr>
 
 let g:lsc_auto_map = v:true
 
@@ -271,8 +259,11 @@ let g:dart_style_guide = 2
 let g:dart_format_on_save = 1
 
 set termguicolors
-set background=dark
-colorscheme gruvbox
+" set background=dark
+colorscheme codedark
+" hi Normal guibg=NONE ctermbg=NONE
+let g:airline_theme = 'codedark'
+
 
 " hot-reload on save
 let g:flutter_hot_reload_on_save = 1
@@ -288,6 +279,7 @@ let g:livepreview_cursorhold_recompile = 1
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab " two tabs for yaml
 
 autocmd FileType svelte setlocal ts=2 sts=2 sw=2 expandtab " two tabs for yaml
+autocmd FileType scss setlocal ts=2 sts=2 sw=2 expandtab " two tabs for yaml
 
 " allow exiting terminal using <Esc>
 tnoremap <Esc> <C-\><C-n>
@@ -296,3 +288,6 @@ set splitbelow
 set splitright
 
 nmap <Leader>l :LLPStartPreview<CR>
+
+
+autocmd FileType typescript,scss setlocal ts=2 sts=2 sw=2 expandtab " two tabs for yaml
