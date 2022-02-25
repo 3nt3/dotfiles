@@ -43,9 +43,9 @@
     ~/.config/qutebrowser/config.py:
       reate: true
       path: config/qutebrowser/config.py
-    ~/.config/nwg-drawer/drawer.css:
+    ~/.config/waybar:
       create: true
-      path: config/nwg-drawer/drawer.css
+      path: config/waybar
     ~/.config/kitty/kitty.conf:
       create: true
       path: config/kitty/kitty.conf
