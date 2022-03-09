@@ -50,6 +50,8 @@ Plug 'evanleck/vim-svelte'
 Plug 'pangloss/vim-javascript'
 Plug 'HerringtonDarkholme/yats.vim'
 
+Plug 'turbio/bracey.vim'
+
 " Initialize plugin system
 call plug#end()
 
@@ -290,4 +292,5 @@ set splitright
 nmap <Leader>l :LLPStartPreview<CR>
 
 
-autocmd FileType typescript,scss setlocal ts=2 sts=2 sw=2 expandtab " two tabs for yaml
+autocmd FileType haskell,typescript setlocal ts=2 sts=2 sw=2 expandtab " two tabs for yaml
+

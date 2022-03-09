@@ -1,3 +1,0 @@
-start=2197.428000
-pause=yes
-vf=@autocrop-crop:lavfi-crop=w=1920:h=1032:x=0:y=24
