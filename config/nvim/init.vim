@@ -92,6 +92,7 @@ noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
 set nu
+set mouse=a
 
 set tabstop=4
 set shiftwidth=4
@@ -165,6 +166,7 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gD :call CocActionAsync('jumpDefinition', 'drop')
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
@@ -189,6 +191,8 @@ nmap <F2> <Plug>(coc-rename)
 " Remap for format selected region
 xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
+
+noremap <leader>F :'<,'>! prettier --parser html --stdin-filepath<cr>
 
 augroup mygroup
   autocmd!
@@ -250,7 +254,7 @@ nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
 let g:lsc_auto_map = v:true
 
-nmap ; :GFiles<CR>
+nmap ; :Files<CR>
 autocmd! FileType fzf tnoremap <buffer> <esc> <c-c>
 
 " ts = 'number of spaces that <Tab> in file uses' sts = 'number of spaces that <Tab> uses while editing' sw = 'number of spaces to use for (auto)indent step' for details see: vimdoc.sourceforge.net/htmldoc/quickref.html#option-list – 
