@@ -86,6 +86,7 @@ autocmd FileType typescriptreact :setlocal sw=2 ts=2 sts=2
 
 " ctrlp
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+let g:ctrlp_cmd = 'CtrlPMixed'
 
 " j/k will move virtual lines (lines that wrap)
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
@@ -298,3 +299,12 @@ nmap <Leader>l :LLPStartPreview<CR>
 
 autocmd FileType haskell,typescript setlocal ts=2 sts=2 sw=2 expandtab " two tabs for yaml
 
+map <A-1> 1gt
+map <A-2> 2gt
+map <A-3> 3gt
+map <A-4> 4gt
+map <A-5> 5gt
+map <A-6> 6gt
+map <A-7> 7gt
+map <A-8> 8gt
+map <A-9> 9gt
