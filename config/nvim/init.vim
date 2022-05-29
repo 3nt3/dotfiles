@@ -36,7 +36,6 @@ Plug 'eagletmt/ghcmod-vim'
 Plug 'Shougo/vimproc'
 
 Plug 'dart-lang/dart-vim-plugin'
-Plug 'thosakwe/vim-flutter'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -296,7 +295,6 @@ set splitright
 
 nmap <Leader>l :LLPStartPreview<CR>
 
-
 autocmd FileType haskell,typescript setlocal ts=2 sts=2 sw=2 expandtab " two tabs for yaml
 
 map <A-1> 1gt
@@ -308,3 +306,6 @@ map <A-6> 6gt
 map <A-7> 7gt
 map <A-8> 8gt
 map <A-9> 9gt
+
+nmap <Leader>fr :CocCommand flutter.run<cr> 
+nmap <Leader>fo :CocCommand flutter.dev.openDevLog<cr>
