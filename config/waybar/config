@@ -21,7 +21,8 @@
             "9": "",
             "urgent": "",
             "focused": "",
-            "default": ""
+            //"default": ""
+            "default": "",
         },
         // show all workspaces on main monitor
         "persistent_workspaces": {
