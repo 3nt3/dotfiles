@@ -308,4 +308,5 @@ map <A-8> 8gt
 map <A-9> 9gt
 
 nmap <Leader>fr :CocCommand flutter.run<cr> 
+nmap <Leader>fR :CocCommand flutter.dev.hotRestart<cr> 
 nmap <Leader>fo :CocCommand flutter.dev.openDevLog<cr>

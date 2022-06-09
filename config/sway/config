@@ -161,6 +161,8 @@ workspace 20 output HDMI-A-1
     # start firefox
     bindsym $mod+Shift+w exec firefox-developer-edition
 
+    bindsym $mod+Shift+s exec systemctl suspend
+
     # open file manger
     bindsym $mod+n exec thunar
 
