@@ -7,7 +7,7 @@
 # set keyboard layout
 input * {
     xkb_layout "us"
-    xkb_options "caps:swapescape"
+    xkb_options "caps:escape"
     xkb_variant "altgr-intl"
 }
 
@@ -161,6 +161,9 @@ workspace 20 output HDMI-A-1
     # start firefox
     bindsym $mod+Shift+w exec firefox-developer-edition
 
+    # start chromium
+    bindsym $mod+Shift+Control+w exec chromium
+
     bindsym $mod+Shift+s exec systemctl suspend
 
     # open file manger
@@ -209,8 +212,7 @@ workspace 20 output HDMI-A-1
     bindsym $mod+$right focus right
 
     bindsym $mod+Left exec playerctl -p spotify previous 
-    bindsym $mod+Down exec playerctl -p spotify play 
-    bindsym $mod+Up exec playerctl -p spotify pause 
+    bindsym $mod+Up exec playerctl -p spotify play-pause 
     bindsym $mod+Right exec playerctl -p spotify next
 
     # Move the focused window with the same, but add Shift
