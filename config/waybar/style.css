@@ -50,9 +50,10 @@ window#waybar {
 #pulseaudio,
 #custom-spotify,
 #tray,
-#mode {
+#mode,
+#custom-vpn {
   padding: 0 3px;
-  margin: 0 2px;
+  margin: 0 5px;
 }
 
 #clock {
@@ -109,4 +110,14 @@ window#waybar {
 }
 
 #tray {
+}
+
+#custom-vpn {
+  padding: 0 15px;
+}
+
+.connected {
+  background: rgb(102, 220, 105);
+  padding: 0 15px;
+  font-weight: bold;
 }

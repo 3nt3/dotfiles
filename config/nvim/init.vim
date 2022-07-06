@@ -51,6 +51,8 @@ Plug 'HerringtonDarkholme/yats.vim'
 
 Plug 'turbio/bracey.vim'
 
+Plug 'ap/vim-css-color'
+
 " Initialize plugin system
 call plug#end()
 
