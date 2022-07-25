@@ -10,3 +10,5 @@
 	rebase = false
 [gpg]
 	program = gpg
+[safe]
+	directory = /opt/flutter

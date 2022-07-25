@@ -13,7 +13,7 @@ colors:
   name: Atelierseaside (dark)
   author: Chris Kempson
   primary:
-    background: "#131513"
+    background: "#222222" # looks better with transparent background imo
     foreground: "#8ca68c"
   cursor:
     text: "#131513"

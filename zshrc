@@ -1,4 +1,4 @@
-# neofetch --ascii "$(cat ~/Pictures/anarchy.txt)"
+
 # I you come from bash you might have to change your $PATH.
 #
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -117,7 +117,7 @@ alias pamcan='pacman'
 alias pancam='pacman'
 alias pacnam='pacman'
 alias tp='trash-put'
-alias th='( alacritty &; disown ) > /dev/null 2>&1'
+alias th='( kitty &; disown ) > /dev/null 2>&1'
 
 zmodload zsh/complist
 
@@ -147,18 +147,57 @@ export PATH="$SPICETIFY_INSTALL:$PATH"
 export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
 
 ttd() {
-    dir=~/docs/schule/Q1/$(ls docs/schule/Q1 | dmenu -l 10)/`date +'%Y-%m-%d'`
+    subject="$(ls $HOME/Documents/schule/Q1 | dmenu -l 10)"
+    dir="$HOME/Documents/schule/Q1/$subject/`date +'%Y-%m-%d'`"
+    mkdir -p "$dir" && cd "$dir"
+    pwd
+    cp -n ../../template.tex unterricht.tex
 
-    mkdir -p $dir && cd $dir
+    author_line="Fach Lehrer"
+    case $subject in 
+        geschichte)
+            author_line="Geschichte-GK Butz"
+            ;;
+
+        englisch)
+            author_line="Englisch-LK Butz"
+            ;;
+
+        physik)
+            author_line="Physik-LK Fluchti"
+            ;;
+
+        sowi)
+            author_line="Sozialwissenschaften-GK Erbasi"
+            ;;
+
+        deutsch)
+            author_line="Deutsch-GK Lex"
+            ;;
+
+        mathe)
+            author_line="Mathematik-GK Gabelin"
+            ;;
+
+        philosophie)
+            author_line="Philosophie-GK Ligus"
+            ;;
+
+        kunst)
+            author_line="Kunst-GK Henne"
+            ;;
+    esac
+
+    sed -i "s/Fach Lehrer/$author_line/" unterricht.tex
 }
 
 alias fastreboot="sudo kexec -l /boot/vmlinuz-linux --initrd=/boot/initramfs-linux.img --reuse-cmdline && sudo kexec -e"
 
 subs() {
     if [[ "$1" == "-t" ]]; then
-        thunar ~/docs/schule/Q1/$( ls docs/schule/Q1 |dmenu -l 10)
+        thunar ~/Documents/schule/Q1/$( ls ~/Documents/schule/Q1 |dmenu -l 10)
     else
-        cd ~/docs/schule/Q1/$( ls docs/schule/Q1 |dmenu -l 10)
+        cd ~/Documents/schule/Q1/$( ls ~/Documents/schule/Q1 |dmenu -l 10)
     fi
 }
 
@@ -241,3 +280,8 @@ function command_not_found_handler {
 chpwd() l
 
 export XDG_CURRENT_DESKTOP=sway
+
+eval $(thefuck --alias)
+
+alias v='nvim'
+source /usr/share/nvm/init-nvm.sh

@@ -1,3 +1,0 @@
-start=153.820000
-fullscreen=yes
-vf=@autocrop-crop:lavfi-crop=w=1920:h=904:x=0:y=130

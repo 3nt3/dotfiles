@@ -1,4 +1,0 @@
-start=1043.643000
-speed=1.610510
-fullscreen=yes
-vf=@autocrop-crop:lavfi-crop=w=1918:h=1078:x=0:y=0

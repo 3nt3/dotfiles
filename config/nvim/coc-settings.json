@@ -4,11 +4,27 @@
       "command": "elm-language-server",
       "filetypes": ["elm"],
       "rootPatterns": ["elm.json"]
+    },
+    "haskell": {
+      "command": "haskell-language-server-wrapper-1.6.1.0",
+      "args": ["--lsp"],
+      "rootPatterns": [
+        "*.cabal",
+        "stack.yaml",
+        "cabal.project",
+        "package.yaml",
+        "hie.yaml"
+      ],
+      "settings": {
+        "haskell": {
+          "formattingProvider": "stylish-haskell"
+        }
+      },
+      "filetypes": ["haskell", "lhaskell"]
     }
   },
   "codeLens.enable": true,
-  "coc.preferences.formatOnSaveFiletypes": [
-    "*"
-  ],
-  "svelte.enable-ts-plugin": true
+  "coc.preferences.formatOnSaveFiletypes": ["*"],
+  "svelte.enable-ts-plugin": true,
+  "diagnostic.checkCurrentLine": true
 }

@@ -32,6 +32,9 @@ exec_always {
 }
 
 exec_always systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+exec oguri &
+exec swayblur -b 10 &
+
 exec export QT_QPA_PLATFORM=wayland
 exec export MOZ_ENABLE_WAYLAND=1
 exec export _JAVA_AWT_WM_NONREPARENTING=1
@@ -39,10 +42,11 @@ exec export _JAVA_AWT_WM_NONREPARENTING=1
 exec eval $(gnome-keyring-daemon --start)
 exec export SSH_AUTH_SOCK
 
+exec_always export XDG_CURRENT_DESKTOP=sway
+exec_always  systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec_always thunar --daemon &
-exec_always exec_always nwg-drawer -r &
-exec_always xss-lock -- swaylock -c 000000 &
 exec swaync &
+exec waybar &
 
 ### Variables
 #
@@ -71,7 +75,7 @@ default_floating_border pixel 4
 # output * bg /run/current-system/sw/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 output * bg ~/Pictures/wallpaper.jpg fill
 
-gaps inner 10
+gaps inner 0
 
 #
 # Example configuration:
@@ -79,32 +83,30 @@ gaps inner 10
 #   output HDMI-A-1 resolution 1920x1080 position 1920,0
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
-output HDMI-A-1 resolution 1920x1080 position 840,140 transform 90 
-output DP-2 resolution 3840x2160 position 1920,0 scale 1
-output DP-3 resolution 3840x2160 position 5760,0 scale 1
+#
+output HDMI-A-1 resolution 2560x1440 position 0,1080
 
-workspace 1 output DP-2
-workspace 2 output DP-2
-workspace 3 output DP-2
-workspace 4 output DP-2
-workspace 5 output DP-2
-workspace 6 output DP-2
-workspace 7 output DP-2
-workspace 8 output DP-2
-workspace 9 output DP-2
-workspace 10 output DP-2
-
-workspace 11 output DP-3
-workspace 12 output DP-3
-workspace 13 output DP-3
-workspace 14 output DP-3
-workspace 15 output DP-3
-workspace 16 output DP-3
-workspace 17 output DP-3
-
+workspace 1 output eDP-1
+workspace 2 output eDP-1
+workspace 3 output eDP-1
+workspace 4 output eDP-1
+workspace 5 output eDP-1
+workspace 6 output eDP-1
+workspace 7 output eDP-1
+workspace 8 output eDP-1
+workspace 9 output eDP-1
+workspace 10 output HDMI-A-1
+workspace 11 output HDMI-A-1
+workspace 12 output HDMI-A-1
+workspace 13 output HDMI-A-1
+workspace 14 output HDMI-A-1
+workspace 15 output HDMI-A-1
+workspace 16 output HDMI-A-1
+workspace 17 output HDMI-A-1
 workspace 18 output HDMI-A-1
 workspace 19 output HDMI-A-1
 workspace 20 output HDMI-A-1
+
 
 assign [class="Spotify"] 9
 assign [class="discord"] 2
@@ -114,8 +116,8 @@ assign [class="discord"] 2
 # Example configuration:
 #
 for_window [shell=".*"] inhibit_idle fullscreen # not turn off while watching video
-exec swayidle -w \
-     before-sleep 'swaylock -f -c 000000'
+# exec swayidle -w \
+#     before-sleep 'swaylock -f -c 000000'
 
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
@@ -149,7 +151,7 @@ exec swayidle -w \
     bindsym $mod+d exec $menu
 
     # start qutebrowser
-    bindsym $mod+Shift+w exec qutebrowser
+    bindsym $mod+Shift+w exec firefox-developer-edition
 
     # open file manger
     bindsym $mod+n exec thunar
@@ -196,10 +198,10 @@ exec swayidle -w \
     bindsym $mod+$up focus up
     bindsym $mod+$right focus right
     # Or use $mod+[up|down|left|right]
-    bindsym $mod+Left focus left
-    bindsym $mod+Down focus down
-    bindsym $mod+Up focus up
-    bindsym $mod+Right focus right
+    bindsym $mod+Left exec playerctl -p spotify prev
+    bindsym $mod+Down exec playerctl -p spotify play
+    bindsym $mod+Up exec playerctl -p spotify pause
+    bindsym $mod+Right exec playerctl -p spotify next
 
     # Move the focused window with the same, but add Shift
     bindsym $mod+Shift+$left move left
@@ -261,6 +263,9 @@ exec swayidle -w \
     bindsym $mod+Shift+F10 move container to workspace number 20
 
     bindsym $mod+Tab workspace back_and_forth
+
+    bindsym $mod+bracketleft workspace prev
+    bindsym $mod+bracketright workspace next
     # Note: workspaces can have any name you want, not just numbers.
     # We just use 1-10 as the default.
 #
@@ -329,22 +334,6 @@ bindsym $mod+r mode "resize"
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
-bar {
-    position top
 
-    # When the status_command prints a new line to stdout, swaybar updates.
-    # The default just shows the current date and time.
-    # status_command while date --rfc-3339=s | cut -c -19; do sleep 1; done
-    status_command while ~/.config/sway/status.sh; do sleep 10; done
-
-
-    colors {
-        statusline #eeeeee
-        background #222222
-        inactive_workspace #32323200 #32323200 #5c5c5c
-    }
-
-    font pango:Hack 11
-}
 
 include /etc/sway/config.d/*

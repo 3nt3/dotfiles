@@ -25,7 +25,7 @@ c.qt.force_platform = 'wayland'
 # with some bitmap fonts. As an alternative to this, it's possible to
 # set font sizes and the `zoom.default` setting.
 # Type: Bool
-c.qt.highdpi = True
+c.qt.highdpi = False
 
 # Always restore open sites when qutebrowser is reopened. Without this
 # option set, `:wq` (`:quit --save`) needs to be used to save open tabs
@@ -780,7 +780,7 @@ c.colors.webpage.preferred_color_scheme = 'dark'
 # either a float value with a "pt" suffix, or an integer value with a
 # "px" suffix.
 # Type: String
-c.fonts.default_size = '10pt'
+c.fonts.default_size = '11pt'
 
 # Bindings for normal mode
 config.bind(',M', 'hint links spawn mpv {hint-url}')

@@ -1,4 +1,0 @@
-start=1370.267000
-osd-level=3
-volume=96.000000
-vf=@autocrop-crop:lavfi-crop=w=1920:h=1038:x=0:y=42
