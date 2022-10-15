@@ -62,6 +62,7 @@
         }
     },
     "disk": {
+	"interval": 3,
         "format": "{percentage_used}% of / used ({free} free)"
     },
     "sway/mode": {

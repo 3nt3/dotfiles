@@ -3,3 +3,6 @@ if [ -n "$DESKTOP_SESSION" ];then
     export SSH_AUTH_SOCK
 fi
 
+
+if [ -e /home/ente/.nix-profile/etc/profile.d/nix.sh ]; then . /home/ente/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+. "$HOME/.cargo/env"

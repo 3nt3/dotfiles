@@ -156,11 +156,19 @@ endfunction
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" Or use `complete_info` if your vim support it, like:
-" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+inoremap <silent><expr> <TAB> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+inoremap <silent><expr> <C-x><C-z> coc#pum#visible() ? coc#pum#stop() : "\<C-x>\<C-z>"
+" remap for complete to use tab and <cr>
+" inoremap <silent><expr> <C-j>
+"     \ coc#pum#visible() ? coc#pum#next(1):
+"     \ <SID>check_back_space() ? "\<Tab>" :
+"     \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+inoremap <silent><expr> <c-space> coc#refresh()
+
+hi CocSearch ctermfg=12 guifg=#18A3FF
+hi CocMenuSel ctermbg=109 guibg=#13354A
 
 " Use `[g` and `]g` to navigate diagnostics
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
@@ -275,6 +283,9 @@ let g:airline_theme = 'codedark'
 
 " hot-reload on save
 let g:flutter_hot_reload_on_save = 1
+nmap <Leader>fs :CocCommand flutter.dev.hotRestart<CR>
+nmap <Leader>fr :CocCommand flutter.run<cr> 
+nmap <Leader>fq :CocCommand flutter.dev.quit<cr> 
 
 nmap <Leader>w :w<CR>
 nmap <Leader>cr :source ~/.config/nvim/init.vim<CR>
@@ -309,6 +320,12 @@ map <A-7> 7gt
 map <A-8> 8gt
 map <A-9> 9gt
 
-nmap <Leader>fr :CocCommand flutter.run<cr> 
 nmap <Leader>fR :CocCommand flutter.dev.hotRestart<cr> 
 nmap <Leader>fo :CocCommand flutter.dev.openDevLog<cr>
+
+autocmd FileType python let b:coc_root_patterns = ['.git', '.env']
+
+nmap <Leader>CC :CocCommand<cr>
+nmap <Leader>b :Buffers<cr>
+
+nmap <Leader>T :term<cr>

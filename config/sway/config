@@ -7,8 +7,7 @@
 # set keyboard layout
 input * {
     xkb_layout "us"
-    xkb_options "caps:escape"
-    xkb_variant "altgr-intl"
+    xkb_options "caps:escape,,compose:ralt"
 }
 
 input type:touchpad {
