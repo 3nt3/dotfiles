@@ -12,3 +12,7 @@
 	program = gpg
 [safe]
 	directory = /opt/flutter
+[core]
+	autocrlf = input
+[push]
+	autoSetupRemote = true

@@ -74,7 +74,7 @@ DISABLE_AUTO_TITLE="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git fzf stack command-not-found colored-man-pages zsh-syntax-highlighting flutter jump npm)
+plugins=(git fzf stack command-not-found colored-man-pages zsh-syntax-highlighting flutter jump npm systemd docker docker-compose)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -106,7 +106,7 @@ export EDITOR='nvim'
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
-export PATH=~/.local/share/npm-global/bin:~/.local/bin:~/.emacs.d/bin:~/.ghcup/bin:$PATH
+export PATH=~/.local/share/npm-global/bin:~/.local/bin:~/.emacs.d/bin:~/.ghcup/bin:~/Android/Sdk/tools/bin:~/Android/Sdk/build-tools:~/.pub-cache/bin:$PATH
 
 export ANDROID_HOME=/home/ente/Android/Sdk
 
@@ -147,8 +147,8 @@ export PATH="$SPICETIFY_INSTALL:$PATH"
 export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
 
 ttd() {
-    subject="$(ls $HOME/Documents/schule/Q1 | dmenu -l 10)"
-    dir="$HOME/Documents/schule/Q1/$subject/`date +'%Y-%m-%d'`"
+    subject="$(ls $HOME/Documents/schule/Q | dmenu -l 10)"
+    dir="$HOME/Documents/schule/Q/$subject/`date +'%Y-%m-%d'`"
     mkdir -p "$dir" && cd "$dir"
     pwd
     cp -n ../../template.tex unterricht.tex
@@ -168,7 +168,7 @@ ttd() {
             ;;
 
         sowi)
-            author_line="Sozialwissenschaften-GK Erbasi"
+            author_line="Sozialwissenschaften-GK Noack"
             ;;
 
         deutsch)
@@ -195,9 +195,9 @@ alias fastreboot="sudo kexec -l /boot/vmlinuz-linux --initrd=/boot/initramfs-lin
 
 subs() {
     if [[ "$1" == "-t" ]]; then
-        thunar ~/Documents/schule/Q1/$( ls ~/Documents/schule/Q1 |dmenu -l 10)
+        thunar ~/Documents/schule//$( ls ~/Documents/schule/Q |dmenu -l 10)
     else
-        cd ~/Documents/schule/Q1/$( ls ~/Documents/schule/Q1 |dmenu -l 10)
+        cd ~/Documents/schule//$( ls ~/Documents/schule/Q |dmenu -l 10)
     fi
 }
 
@@ -285,3 +285,5 @@ eval $(thefuck --alias)
 
 alias v='nvim'
 source /usr/share/nvm/init-nvm.sh
+
+alias get_idf="source ~/esp/esp-idf/export.sh"

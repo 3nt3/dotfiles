@@ -23,8 +23,12 @@
       "filetypes": ["haskell", "lhaskell"]
     }
   },
+  "rust-analyzer.inlayHints.typeHints.enable": true,
   "codeLens.enable": true,
   "coc.preferences.formatOnSaveFiletypes": ["*"],
   "svelte.enable-ts-plugin": true,
-  "diagnostic.checkCurrentLine": true
+  "diagnostic.checkCurrentLine": true,
+  "rust-analyzer.inlayHints.bindingModeHints.enable": true,
+  "rust-analyzer.inlayHints.parameterHints.enable": true,
+  "rust-analyzer.procMacro.enable": true
 }

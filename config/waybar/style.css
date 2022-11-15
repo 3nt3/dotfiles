@@ -6,6 +6,10 @@
   min-height: 0;
 }
 
+* {
+  color: white;
+}
+
 window#waybar {
   background: rgba(0, 0, 0, 0.5);
   color: white;
@@ -47,8 +51,8 @@ window#waybar {
 #custom-spotify,
 #tray,
 #mode {
-  padding: 0 3px;
-  margin: 0 2px;
+  padding: 0 2px;
+  margin: 0 1px;
 }
 
 #clock {

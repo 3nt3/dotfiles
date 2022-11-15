@@ -8,8 +8,7 @@
 # set keyboard layout
 input * {
     xkb_layout "us"
-    xkb_options "caps:swapescape"
-    xkb_variant "altgr-intl"
+    xkb_options "caps:swapescape,,compose:ralt"
 }
 
 input type:touchpad {
@@ -47,6 +46,12 @@ exec_always  systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DES
 exec_always thunar --daemon &
 exec swaync &
 exec waybar &
+
+assign [app_id="org.keepassxc.KeePassXC" tiling] 8
+exec keepassxc &
+
+assign [title=Spotify] 9
+exec spotify &
 
 ### Variables
 #
@@ -95,29 +100,25 @@ workspace 6 output eDP-1
 workspace 7 output eDP-1
 workspace 8 output eDP-1
 workspace 9 output eDP-1
-workspace 10 output HDMI-A-1
-workspace 11 output HDMI-A-1
-workspace 12 output HDMI-A-1
-workspace 13 output HDMI-A-1
-workspace 14 output HDMI-A-1
-workspace 15 output HDMI-A-1
-workspace 16 output HDMI-A-1
-workspace 17 output HDMI-A-1
-workspace 18 output HDMI-A-1
-workspace 19 output HDMI-A-1
-workspace 20 output HDMI-A-1
-
-
-assign [class="Spotify"] 9
-assign [class="discord"] 2
+workspace 10 output DP-3
+workspace 11 output DP-3
+workspace 12 output DP-3
+workspace 13 output DP-3
+workspace 14 output DP-3
+workspace 15 output DP-3
+workspace 16 output DP-3
+workspace 17 output DP-3
+workspace 18 output DP-3
+workspace 19 output DP-3
+workspace 20 output DP-3
 
 ### Idle configuration
 #
 # Example configuration:
 #
 for_window [shell=".*"] inhibit_idle fullscreen # not turn off while watching video
-# exec swayidle -w \
-#     before-sleep 'swaylock -f -c 000000'
+exec swayidle -w \
+    before-sleep 'swaylock -f -c 000000'
 
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
@@ -198,7 +199,7 @@ for_window [shell=".*"] inhibit_idle fullscreen # not turn off while watching vi
     bindsym $mod+$up focus up
     bindsym $mod+$right focus right
     # Or use $mod+[up|down|left|right]
-    bindsym $mod+Left exec playerctl -p spotify prev
+    bindsym $mod+Left exec playerctl -p spotify previous
     bindsym $mod+Down exec playerctl -p spotify play
     bindsym $mod+Up exec playerctl -p spotify pause
     bindsym $mod+Right exec playerctl -p spotify next
@@ -329,6 +330,10 @@ mode "resize" {
     bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
+
+bindsym $mod+shift+a exec "swaync-client -t"
+bindsym $mod+shift+x exec "swaync-client -C"
+bindsym $mod+shift+z exec "swaylock -c 000000"
 
 #
 # Status Bar:

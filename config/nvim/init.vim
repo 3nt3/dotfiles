@@ -5,6 +5,9 @@ let localmapleader = ","
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
 
+
+Plug 'ggandor/leap.nvim'
+
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'jistr/vim-nerdtree-tabs'
 "Plug 'tsony-tsonev/nerdtree-git-plugin'
@@ -55,6 +58,11 @@ Plug 'pangloss/vim-javascript'
 Plug 'HerringtonDarkholme/yats.vim'
 
 Plug 'turbio/bracey.vim'
+
+Plug 'joshdick/onedark.vim'
+
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 " Initialize plugin system
 call plug#end()
@@ -128,7 +136,7 @@ let g:coc_global_extensions = [
   \ 'coc-pairs',
   \ 'coc-tsserver',
   \ 'coc-eslint', 
-  \ 'coc-prettier', 
+  \ 'coc-prettier',
   \ 'coc-json', 
   \ ]
 " from readme
@@ -144,12 +152,6 @@ set signcolumn=yes
 
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
@@ -157,12 +159,21 @@ endfunction
 
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
+"
+" 
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: There's always complete item selected by default, you may want to enable
+" no select by `"suggest.noselect": true` in your configuration file.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" Or use `complete_info` if your vim support it, like:
-" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice.
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+inoremap <silent><expr> <TAB> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Use `[g` and `]g` to navigate diagnostics
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
@@ -256,7 +267,7 @@ nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
 let g:lsc_auto_map = v:true
 
-nmap ; :GFiles<CR>
+nmap ; :Files<CR>
 autocmd! FileType fzf tnoremap <buffer> <esc> <c-c>
 
 " ts = 'number of spaces that <Tab> in file uses' sts = 'number of spaces that <Tab> uses while editing' sw = 'number of spaces to use for (auto)indent step' for details see: vimdoc.sourceforge.net/htmldoc/quickref.html#option-list – 
@@ -268,10 +279,10 @@ let g:dart_format_on_save = 1
 
 set termguicolors
 " set background=dark
-colorscheme codedark
-" hi Normal guibg=NONE ctermbg=NONE
+" colorscheme codedark
+colorscheme onedark
+hi Normal guibg=NONE ctermbg=NONE
 let g:airline_theme = 'codedark'
-
 
 " hot-reload on save
 let g:flutter_hot_reload_on_save = 1
@@ -280,7 +291,12 @@ nmap <Leader>w :w<CR>
 nmap <Leader>cr :source ~/.config/nvim/init.vim<CR>
 nmap <Leader>ce :tabedit ~/.config/nvim/init.vim<CR>
 
+nmap <Leader>fr :CocCommand flutter.run<CR>
+nmap <Leader>fc :CocCommand flutter.dev.openDevLog<CR>
+nmap <Leader>fR :CocCommand flutter.dev.hotRestart<CR>
+
 " autocmd FileType tex setl updatetime=1
+let g:livepreview_engine = 'xelatex' . ''
 let g:livepreview_previewer = 'zathura'
 let g:livepreview_cursorhold_recompile = 2 
 
@@ -299,3 +315,6 @@ nmap <Leader>l :LLPStartPreview<CR>
 
 autocmd FileType haskell,typescript setlocal ts=2 sts=2 sw=2 expandtab " two tabs for yaml
 
+map <Leader>b :Buffers<CR>
+
+lua require('leap').add_default_mappings()
