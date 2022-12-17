@@ -27,8 +27,8 @@
   "coc.preferences.formatOnSaveFiletypes": ["*"],
   "svelte.enable-ts-plugin": true,
   "diagnostic.checkCurrentLine": true,
-  "rust-analyzer.server.path": "/home/ente/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/rust-analyzer",
   "rust-analyzer.procMacro.enable": true,
   "rust-analyzer.experimental.procAttrMacros": true,
-  "prettier.useEditorConfig": true
+  "prettier.useEditorConfig": true,
+  "dialog.floatBorderHighlight": "CocFloating"
 }

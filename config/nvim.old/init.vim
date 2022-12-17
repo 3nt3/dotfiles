@@ -53,6 +53,11 @@ Plug 'turbio/bracey.vim'
 
 Plug 'ap/vim-css-color'
 
+" Plug 'dense-analysis/ale'
+Plug 'ggandor/leap.nvim'
+
+Plug 'joshdick/onedark.vim'
+
 " Initialize plugin system
 call plug#end()
 
@@ -66,18 +71,18 @@ nmap ++ <plug>NERDCommenterToggle
 "autocmd VimEnter * NERDTree
 
 let g:NERDTreeGitStatusWithFlags = 1
-"let g:WebDevIconsUnicodeDecorateFolderNodes = 1
-"let g:NERDTreeGitStatusNodeColorization = 1
-"let g:NERDTreeColorMapCustom = {
-    "\ "Staged"    : "#0ee375",  
-    "\ "Modified"  : "#d9bf91",  
-    "\ "Renamed"   : "#51C9FC",  
-    "\ "Untracked" : "#FCE77C",  
-    "\ "Unmerged"  : "#FC51E6",  
-    "\ "Dirty"     : "#FFBD61",  
-    "\ "Clean"     : "#87939A",   
-    "\ "Ignored"   : "#808080"   
-    "\ }                         
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+let g:NERDTreeGitStatusNodeColorization = 1
+let g:NERDTreeColorMapCustom = {
+    \ "Staged"    : "#0ee375",  
+    \ "Modified"  : "#d9bf91",  
+    \ "Renamed"   : "#51C9FC",  
+    \ "Untracked" : "#FCE77C",  
+    \ "Unmerged"  : "#FC51E6",  
+    \ "Dirty"     : "#FFBD61",  
+    \ "Clean"     : "#87939A",   
+    \ "Ignored"   : "#808080"   
+    \ }                         
 
 
 let g:NERDTreeIgnore = ['^node_modules$']
@@ -94,6 +99,7 @@ noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
 set nu
+set rnu
 set mouse=a
 
 set tabstop=4
@@ -176,7 +182,7 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gD :call CocActionAsync('jumpDefinition', 'drop')
+nmap <silent> gD :call CocActionAsync('jumpDefinition', 'drop') <cr>
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
@@ -276,9 +282,11 @@ let g:dart_format_on_save = 1
 
 set termguicolors
 " set background=dark
-colorscheme codedark
 " hi Normal guibg=NONE ctermbg=NONE
-let g:airline_theme = 'codedark'
+"colorscheme codedark
+"let g:airline_theme = 'codedark'
+colorscheme onedark
+let g:airline_theme = 'onedark'
 
 
 " hot-reload on save
@@ -329,3 +337,7 @@ nmap <Leader>CC :CocCommand<cr>
 nmap <Leader>b :Buffers<cr>
 
 nmap <Leader>T :term<cr>
+
+lua require('leap').add_default_mappings() 
+
+filetype plugin on
