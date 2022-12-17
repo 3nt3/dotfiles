@@ -66,6 +66,14 @@ require('packer').startup(function(use)
   if is_bootstrap then
     require('packer').sync()
   end
+
+  -- Navigator to navigate splits
+  use {
+    'numToStr/Navigator.nvim',
+    config = function()
+        require('Navigator').setup()
+    end
+  }
 end)
 
 -- When we are bootstrapping a configuration, it doesn't
@@ -327,6 +335,14 @@ local on_attach = function(_, bufnr)
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
 
+  nmap('<leader>f', function ()
+    if vim.lsp.buf.format then
+      vim.lsp.buf.format()
+    elseif vim.lsp.buf.formatting then
+      vim.lsp.buf.formatting()
+    end
+  end, '[F]ormat' )
+
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     if vim.lsp.buf.format then
@@ -439,6 +455,13 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
+
+-- Navigator setup
+require('Navigator').setup()
+vim.keymap.set({'n', 't'}, '<C-h>', '<CMD>NavigatorLeft<CR>')
+vim.keymap.set({'n', 't'}, '<C-l>', '<CMD>NavigatorRight<CR>')
+vim.keymap.set({'n', 't'}, '<C-k>', '<CMD>NavigatorUp<CR>')
+vim.keymap.set({'n', 't'}, '<C-j>', '<CMD>NavigatorDown<CR>')
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
