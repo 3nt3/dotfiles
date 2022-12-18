@@ -35,6 +35,17 @@ require('packer').startup(function(use)
     end,
   }
 
+  use {
+    "themaxmarchuk/tailwindcss-colors.nvim",
+    -- load only on require("tailwindcss-colors")
+    module = "tailwindcss-colors",
+    -- run the setup function after plugin is loaded 
+    config = function ()
+      -- pass config options here (or nothing to use defaults)
+      require("tailwindcss-colors").setup()
+    end
+  }
+
   use { -- Additional text objects via treesitter
     'nvim-treesitter/nvim-treesitter-textobjects',
     after = 'nvim-treesitter',
@@ -71,7 +82,7 @@ require('packer').startup(function(use)
   use {
     'numToStr/Navigator.nvim',
     config = function()
-        require('Navigator').setup()
+      require('Navigator').setup()
     end
   }
 end)
@@ -217,13 +228,14 @@ vim.keymap.set('n', '<leader>/', function()
 end, { desc = '[/] Fuzzily search in current buffer]' })
 
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
+vim.keymap.set('n', '<leader>sb', require('telescope.builtin').buffers, { desc = '[S]earch [B]uffers' })
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 
 -- custom keymaps
-vim.keymap.set('n', '<leader>ce', function ()
+vim.keymap.set('n', '<leader>ce', function()
   vim.cmd.tabedit('~/.config/nvim/init.lua')
 end, { desc = '[C]onfig [E]dit' })
 
@@ -231,7 +243,7 @@ end, { desc = '[C]onfig [E]dit' })
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'typescript', 'help' },
+  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'typescript', 'help', 'svelte' },
 
   highlight = { enable = true },
   indent = { enable = true },
@@ -335,13 +347,13 @@ local on_attach = function(_, bufnr)
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
 
-  nmap('<leader>f', function ()
+  nmap('<leader>f', function()
     if vim.lsp.buf.format then
       vim.lsp.buf.format()
     elseif vim.lsp.buf.formatting then
       vim.lsp.buf.formatting()
     end
-  end, '[F]ormat' )
+  end, '[F]ormat')
 
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
@@ -358,7 +370,7 @@ require('mason').setup()
 
 -- Enable the following language servers
 -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'sumneko_lua', 'gopls' }
+local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'sumneko_lua', 'gopls', 'svelte', 'tailwindcss' }
 
 -- Ensure the servers above are installed
 require('mason-lspconfig').setup {
@@ -413,6 +425,15 @@ require('lspconfig').dartls.setup {
   capabilities = capabilities
 }
 
+-- tailwind setup
+require('lspconfig').tailwindcss.setup {
+  include_languages = { 'svelte' },
+  on_attach = function (client, bufnr)
+    on_attach(client, bufnr)
+    require("tailwindcss-colors").buf_attach(bufnr)
+  end
+}
+
 -- nvim-cmp setup
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'
@@ -458,10 +479,10 @@ cmp.setup {
 
 -- Navigator setup
 require('Navigator').setup()
-vim.keymap.set({'n', 't'}, '<C-h>', '<CMD>NavigatorLeft<CR>')
-vim.keymap.set({'n', 't'}, '<C-l>', '<CMD>NavigatorRight<CR>')
-vim.keymap.set({'n', 't'}, '<C-k>', '<CMD>NavigatorUp<CR>')
-vim.keymap.set({'n', 't'}, '<C-j>', '<CMD>NavigatorDown<CR>')
+vim.keymap.set({ 'n', 't' }, '<C-h>', '<CMD>NavigatorLeft<CR>')
+vim.keymap.set({ 'n', 't' }, '<C-l>', '<CMD>NavigatorRight<CR>')
+vim.keymap.set({ 'n', 't' }, '<C-k>', '<CMD>NavigatorUp<CR>')
+vim.keymap.set({ 'n', 't' }, '<C-j>', '<CMD>NavigatorDown<CR>')
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
