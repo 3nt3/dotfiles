@@ -39,8 +39,8 @@ require('packer').startup(function(use)
     "themaxmarchuk/tailwindcss-colors.nvim",
     -- load only on require("tailwindcss-colors")
     module = "tailwindcss-colors",
-    -- run the setup function after plugin is loaded 
-    config = function ()
+    -- run the setup function after plugin is loaded
+    config = function()
       -- pass config options here (or nothing to use defaults)
       require("tailwindcss-colors").setup()
     end
@@ -116,6 +116,7 @@ vim.o.hlsearch = false
 
 -- Make line numbers default
 vim.wo.number = true
+vim.wo.relativenumber = true
 
 -- Enable mouse mode
 vim.o.mouse = 'a'
@@ -140,6 +141,9 @@ vim.cmd [[colorscheme onedark]]
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
+
+vim.o.scrolloff = 8
+vim.o.signcolumn = "yes"
 
 -- [[ Basic Keymaps ]]
 -- Set <space> as the leader key
@@ -228,7 +232,7 @@ vim.keymap.set('n', '<leader>/', function()
 end, { desc = '[/] Fuzzily search in current buffer]' })
 
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
-vim.keymap.set('n', '<leader>sb', require('telescope.builtin').buffers, { desc = '[S]earch [B]uffers' })
+vim.keymap.set('n', '<C-p>', require('telescope.builtin').git_files, { desc = 'Search Git Files' })
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
@@ -238,6 +242,8 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 vim.keymap.set('n', '<leader>ce', function()
   vim.cmd.tabedit('~/.config/nvim/init.lua')
 end, { desc = '[C]onfig [E]dit' })
+vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
+vim.keymap.set('n', '<leader>so', vim.cmd.so)
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
@@ -257,19 +263,6 @@ require('nvim-treesitter.configs').setup {
     },
   },
   textobjects = {
-    select = {
-      enable = true,
-      lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-      keymaps = {
-        -- You can use the capture groups defined in textobjects.scm
-        ['aa'] = '@parameter.outer',
-        ['ia'] = '@parameter.inner',
-        ['af'] = '@function.outer',
-        ['if'] = '@function.inner',
-        ['ac'] = '@class.outer',
-        ['ic'] = '@class.inner',
-      },
-    },
     move = {
       enable = true,
       set_jumps = true, -- whether to set jumps in the jumplist
@@ -288,6 +281,19 @@ require('nvim-treesitter.configs').setup {
       goto_previous_end = {
         ['[M'] = '@function.outer',
         ['[]'] = '@class.outer',
+      },
+    },
+    select = {
+      enable = true,
+      lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
+      keymaps = {
+        -- You can use the capture groups defined in textobjects.scm
+        ['aa'] = '@parameter.outer',
+        ['ia'] = '@parameter.inner',
+        ['af'] = '@function.outer',
+        ['if'] = '@function.inner',
+        ['ac'] = '@class.outer',
+        ['ic'] = '@class.inner',
       },
     },
     swap = {
@@ -363,6 +369,11 @@ local on_attach = function(_, bufnr)
       vim.lsp.buf.formatting()
     end
   end, { desc = 'Format current buffer with LSP' })
+  --
+  -- format on save
+  vim.cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
+  -- or
+  vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.formatting_sync()]]
 end
 
 -- Setup mason so it can manage external tooling
@@ -425,10 +436,15 @@ require('lspconfig').dartls.setup {
   capabilities = capabilities
 }
 
+require('lspconfig').svelte.setup {
+  on_attach = on_attach,
+  capabilities = capabilities
+}
+
 -- tailwind setup
 require('lspconfig').tailwindcss.setup {
   include_languages = { 'svelte' },
-  on_attach = function (client, bufnr)
+  on_attach = function(client, bufnr)
     on_attach(client, bufnr)
     require("tailwindcss-colors").buf_attach(bufnr)
   end
