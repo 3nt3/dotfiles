@@ -83,7 +83,8 @@ exec_always {
 # output * bg /run/current-system/sw/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 output * bg ~/Pictures/wallpaper.jpg fill
 
-gaps inner 0
+gaps inner 10
+# gaps outer 10
 
 #
 # Example configuration:

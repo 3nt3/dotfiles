@@ -28,6 +28,8 @@ require('packer').startup(function(use)
     requires = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
   }
 
+  use 'rafamadriz/friendly-snippets'
+
   use { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     run = function()
@@ -51,12 +53,19 @@ require('packer').startup(function(use)
     after = 'nvim-treesitter',
   }
 
+  -- VimTeX
+  use 'lervag/vimtex'
+  use 'hrsh7th/cmp-omni'
+
   -- Git related plugins
   use 'tpope/vim-fugitive'
   use 'tpope/vim-rhubarb'
   use 'lewis6991/gitsigns.nvim'
 
+  use { 'hachy/eva01.vim', branch = "main" } -- eva01 Color theme
+  use 'NLKNguyen/papercolor-theme' -- PAper Color theme
   use 'navarasu/onedark.nvim' -- Theme inspired by Atom
+
   use 'nvim-lualine/lualine.nvim' -- Fancier statusline
   use 'lukas-reineke/indent-blankline.nvim' -- Add indentation guides even on blank lines
   use 'numToStr/Comment.nvim' -- "gc" to comment visual regions/lines
@@ -137,7 +146,8 @@ vim.wo.signcolumn = 'yes'
 
 -- Set colorscheme
 vim.o.termguicolors = true
-vim.cmd [[colorscheme onedark]]
+vim.o.background = 'dark'
+vim.cmd [[colorscheme eva01]]
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
@@ -490,8 +500,11 @@ cmp.setup {
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
+    { name = "omni", filetypes = { 'tex ' } },
   },
 }
+
+require('luasnip.loaders.from_vscode').lazy_load()
 
 -- Navigator setup
 require('Navigator').setup()

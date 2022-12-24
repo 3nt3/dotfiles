@@ -95,15 +95,30 @@ _G.packer_plugins = {
     path = "/home/ente/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp",
     url = "https://github.com/hrsh7th/cmp-nvim-lsp"
   },
+  ["cmp-omni"] = {
+    loaded = true,
+    path = "/home/ente/.local/share/nvim/site/pack/packer/start/cmp-omni",
+    url = "https://github.com/hrsh7th/cmp-omni"
+  },
   cmp_luasnip = {
     loaded = true,
     path = "/home/ente/.local/share/nvim/site/pack/packer/start/cmp_luasnip",
     url = "https://github.com/saadparwaiz1/cmp_luasnip"
   },
+  ["eva01.vim"] = {
+    loaded = true,
+    path = "/home/ente/.local/share/nvim/site/pack/packer/start/eva01.vim",
+    url = "https://github.com/hachy/eva01.vim"
+  },
   ["fidget.nvim"] = {
     loaded = true,
     path = "/home/ente/.local/share/nvim/site/pack/packer/start/fidget.nvim",
     url = "https://github.com/j-hui/fidget.nvim"
+  },
+  ["friendly-snippets"] = {
+    loaded = true,
+    path = "/home/ente/.local/share/nvim/site/pack/packer/start/friendly-snippets",
+    url = "https://github.com/rafamadriz/friendly-snippets"
   },
   ["gitsigns.nvim"] = {
     loaded = true,
@@ -162,6 +177,11 @@ _G.packer_plugins = {
     path = "/home/ente/.local/share/nvim/site/pack/packer/start/packer.nvim",
     url = "https://github.com/wbthomason/packer.nvim"
   },
+  ["papercolor-theme"] = {
+    loaded = true,
+    path = "/home/ente/.local/share/nvim/site/pack/packer/start/papercolor-theme",
+    url = "https://github.com/NLKNguyen/papercolor-theme"
+  },
   ["plenary.nvim"] = {
     loaded = true,
     path = "/home/ente/.local/share/nvim/site/pack/packer/start/plenary.nvim",
@@ -202,6 +222,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/ente/.local/share/nvim/site/pack/packer/start/vim-sleuth",
     url = "https://github.com/tpope/vim-sleuth"
+  },
+  vimtex = {
+    loaded = true,
+    path = "/home/ente/.local/share/nvim/site/pack/packer/start/vimtex",
+    url = "https://github.com/lervag/vimtex"
   }
 }
 
