@@ -155,10 +155,9 @@ workspace 20 output HDMI-A-1
     # Start your launcher
     bindsym $mod+d exec $menu
 
-    bindsym $mod+Shift+d exec ~/.local/bin/sway_select_window.sh
+    bindsym $mod+Control+Space exec ~/.local/bin/sway_select_window.sh
 
-    # start qutebrowser
-    # bindsym $mod+Shift+w exec ~/src/other/qutebrowser/venv/bin/python ~/src/other/qutebrowser/qutebrowser.py
+    bindsym $mod+Period exec emote
     
     # start firefox
     bindsym $mod+Shift+w exec firefox-developer-edition
