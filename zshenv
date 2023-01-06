@@ -3,3 +3,4 @@ if [ -n "$DESKTOP_SESSION" ];then
     export SSH_AUTH_SOCK
 fi
 
+PATH="$HOME/.npm-global/bin:$PATH"

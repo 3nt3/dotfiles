@@ -7,6 +7,7 @@ lsp.ensure_installed({
   'eslint',
   'sumneko_lua',
   'rust_analyzer',
+  'tailwindcss'
 })
 
 -- Fix Undefined global 'vim'
@@ -19,7 +20,6 @@ lsp.configure('sumneko_lua', {
         }
     }
 })
-
 
 local cmp = require('cmp')
 local cmp_select = {behavior = cmp.SelectBehavior.Select}
@@ -40,7 +40,8 @@ lsp.setup_nvim_cmp({
 })
 
 lsp.set_preferences({
-    suggest_lsp_servers = false,
+    suggest_lsp_servers = true,
+    setup_servers_on_start = true,
     sign_icons = {
         error = 'E',
         warn = 'W',
