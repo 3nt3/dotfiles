@@ -1,9 +1,10 @@
 * {
   border: none;
   border-radius: 0;
-  font-family: "Ubuntu Nerd Font";
+  font-family: "SF Pro";
   font-size: 16px;
   min-height: 0;
+  letter-spacing: -1px;
 }
 
 * {
@@ -51,8 +52,8 @@ window#waybar {
 #custom-spotify,
 #tray,
 #mode {
-  padding: 0 2px;
-  margin: 0 1px;
+  padding: 0 0px;
+  margin: 0 0px;
 }
 
 #clock {
@@ -110,3 +111,4 @@ window#waybar {
 
 #tray {
 }
+

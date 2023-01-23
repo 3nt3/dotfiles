@@ -154,7 +154,7 @@ ttd() {
     cp -n ../../template.tex unterricht.tex
 
     author_line="Fach Lehrer"
-    case $subject in 
+    case $subject in
         geschichte)
             author_line="Geschichte-GK Butz"
             ;;
@@ -287,3 +287,7 @@ alias v='nvim'
 source /usr/share/nvm/init-nvm.sh
 
 alias get_idf="source ~/esp/esp-idf/export.sh"
+
+export FZF_DEFAULT_COMMAND="fd . $HOME"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd -t d . $HOME"

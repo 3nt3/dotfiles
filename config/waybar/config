@@ -7,7 +7,7 @@
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/mode", "custom/media"],
     "modules-center": [],
-    "modules-right": ["custom/ice_speed", "idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "temperature", "backlight", "keyboard-state", "battery", "battery#bat2", "clock", "tray"],
+    "modules-right": ["custom/icespeed", "idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "temperature", "backlight", "keyboard-state", "battery", "battery#bat2", "clock", "tray"],
     // Modules configuration
     "sway/workspaces": {
         "disable-scroll": true,
@@ -19,8 +19,8 @@
             "2": "",
             "9": "",
             "urgent": "",
-            "focused": "",
-            "default": ""
+            "focused": "",
+            "default": ""
         }
     },
     // "sway/workspaces": {
@@ -170,7 +170,8 @@
         "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
         // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
     },
-    "custom/ice_speed": {
+    "custom/icespeed": {
+        "name": "custom-ice-speed",
         "exec": "$HOME/.local/bin/ice-speed",
         "exec-if": "sh -c '[ \"$(iwgetid -r)\" == \"WIFIonICE\" ]'",
         "interval": 5

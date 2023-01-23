@@ -7,8 +7,10 @@ lsp.ensure_installed({
   'eslint',
   'sumneko_lua',
   'rust_analyzer',
-  'tailwindcss'
+  'tailwindcss',
 })
+
+lsp.configure('dartls')
 
 -- Fix Undefined global 'vim'
 lsp.configure('sumneko_lua', {
