@@ -1,13 +1,13 @@
 * {
   border: none;
   border-radius: 0;
-  font-family: "Ubuntu Nerd Font";
+  font-family: "Inter";
   font-size: 20px;
   min-height: 0;
 }
 
 window#waybar {
-  background: transparent;
+  background: rgba(0, 0, 0, 0.7);
   color: white;
 }
 
@@ -25,12 +25,15 @@ window#waybar {
   padding: 0 5px;
   background: transparent;
   color: white;
-  border-top: 2px solid transparent;
+  border-top: 4px solid transparent;
 }
 
 #workspaces button.focused {
-  color: #6c5ce7;
-  border-top: 2px solid #6c5ce7;
+  padding: 0 5px;
+  color: #D980FA;
+  border-top: 4px solid #D980FA;
+  /* color: #27ae60; */
+  /* border-top: 4px solid #27ae60; */
 }
 
 #workspaces button.persistent {

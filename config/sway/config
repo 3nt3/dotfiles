@@ -35,6 +35,8 @@ exec export _JAVA_AWT_WM_NONREPARENTING=1
 exec eval $(gnome-keyring-daemon --start)
 exec export SSH_AUTH_SOCK
 
+exec emote &
+
 exec_always export XDG_CURRENT_DESKTOP=sway
 exec_always  systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec_always thunar --daemon &
