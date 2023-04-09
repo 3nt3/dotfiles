@@ -10,6 +10,6 @@ if [ -e /home/ente/.nix-profile/etc/profile.d/nix.sh ]; then . /home/ente/.nix-p
 export REALDEBRID_USERNAME="3nt3"
 export REALDEBRID_PASSWORD="3F4HYgegvZC~9vMyUkrzc%~4XHW@TYHY"
 
-export TERMINAL="kitty"
+export TERMINAL="/usr/bin/kitty"
 
 export PATH="/home/ente/src/other/flutter/bin:$PATH"

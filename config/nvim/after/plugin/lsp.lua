@@ -62,6 +62,16 @@ lsp.set_preferences({
     }
 })
 
+lsp.configure("tailwindcss", {
+    filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact", "rust" },
+    settings = {
+        includeLanguages = {
+            rust = "html",
+        },
+    },
+
+})
+
 lsp.on_attach(function(client, bufnr)
     local opts = { buffer = bufnr, remap = false }
 
