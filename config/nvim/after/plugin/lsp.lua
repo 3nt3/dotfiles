@@ -1,16 +1,17 @@
 local lsp = require("lsp-zero")
 
+
 lsp.preset("recommended")
 
 lsp.ensure_installed({
     'tsserver',
     'eslint',
-    'sumneko_lua',
+    'lua_ls',
     'rust_analyzer',
 })
 
 -- Fix Undefined global 'vim'
-lsp.configure('sumneko_lua', {
+lsp.configure('lua_ls', {
     settings = {
         Lua = {
             diagnostics = {
@@ -20,6 +21,8 @@ lsp.configure('sumneko_lua', {
     }
 })
 
+-- we'll use rust-tools
+lsp.skip_server_setup({ 'rust_analyzer' })
 
 local cmp = require('cmp')
 cmp.setup({
@@ -30,8 +33,8 @@ cmp.setup({
         { name = "luasnip", keyword_length = 1, trigger_characters = { '@' } },
     }, {
         { name = "nvim_lsp" },
-        { name = "buffer" },
-        { name = "luasnip" },
+        { name = "buffer", keyword_length = 3 },
+        { name = "luasnip", keyword_length = 1, trigger_characters = { '@' } },
     })
 })
 
@@ -64,9 +67,15 @@ lsp.set_preferences({
 
 lsp.configure("tailwindcss", {
     filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact", "rust" },
+    init_options = {
+        userLanguages = {
+            rust = "html",
+        },
+    },
     settings = {
         includeLanguages = {
             rust = "html",
+            ["*.rs"] = "html",
         },
     },
 
@@ -80,13 +89,15 @@ lsp.on_attach(function(client, bufnr)
         return
     end
 
+    require("lsp-inlayhints").on_attach(client, bufnr)
+
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
     vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
     vim.keymap.set("n", "<leader>vws", vim.lsp.buf.workspace_symbol, opts)
     vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, opts)
     vim.keymap.set("n", "[d", vim.diagnostic.goto_next, opts)
     vim.keymap.set("n", "]d", vim.diagnostic.goto_prev, opts)
-    vim.keymap.set("n", "<leader>vca", vim.lsp.buf.code_action, opts)
+    vim.keymap.set("n", "<leader>ac", vim.lsp.buf.code_action, opts)
     vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, opts)
     vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
     vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
@@ -97,3 +108,25 @@ lsp.setup()
 vim.diagnostic.config({
     virtual_text = true,
 })
+
+local rust_lsp = lsp.build_options('rust_analyzer', {
+    single_file_support = false,
+    on_attach = function(client, bufnr)
+    end,
+    settings = {
+        ["rust-analyzer"] = {
+            checkOnSave = {
+                command = "clippy",
+                extraArgs = { "--all", "--", "-W", "clippy::all" },
+            },
+            rustfmt = {
+                extraArgs = { "+nightly" },
+            },
+            procMacro = {
+                enable = true,
+            },
+        },
+    }
+})
+
+require('rust-tools').setup({ server = rust_lsp })

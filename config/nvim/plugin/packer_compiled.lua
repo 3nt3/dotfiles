@@ -176,6 +176,16 @@ _G.packer_plugins = {
     path = "/home/ente/.local/share/nvim/site/pack/packer/start/rose-pine",
     url = "https://github.com/rose-pine/neovim"
   },
+  ["rust-tools.nvim"] = {
+    loaded = true,
+    path = "/home/ente/.local/share/nvim/site/pack/packer/start/rust-tools.nvim",
+    url = "https://github.com/simrat39/rust-tools.nvim"
+  },
+  ["seoul256.vim"] = {
+    loaded = true,
+    path = "/home/ente/.local/share/nvim/site/pack/packer/start/seoul256.vim",
+    url = "https://github.com/junegunn/seoul256.vim"
+  },
   ["telescope.nvim"] = {
     loaded = true,
     path = "/home/ente/.local/share/nvim/site/pack/packer/start/telescope.nvim",

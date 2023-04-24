@@ -20,6 +20,7 @@ return require('packer').startup(function(use)
 			vim.cmd('colorscheme rose-pine')
 		end
 	})
+	use('junegunn/seoul256.vim')
 
 	use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
 	use('nvim-treesitter/playground')
@@ -36,6 +37,9 @@ return require('packer').startup(function(use)
 			{ 'neovim/nvim-lspconfig' },
 			{ 'williamboman/mason.nvim' },
 			{ 'williamboman/mason-lspconfig.nvim' },
+
+			-- inlay hints
+			{ 'simrat39/rust-tools.nvim' },
 
 			-- Autocompletion
 			{ 'hrsh7th/nvim-cmp' },
