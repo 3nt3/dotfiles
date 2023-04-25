@@ -16,9 +16,6 @@ return require('packer').startup(function(use)
 	use({
 		'rose-pine/neovim',
 		as = 'rose-pine',
-		config = function()
-			vim.cmd('colorscheme rose-pine')
-		end
 	})
 	use('junegunn/seoul256.vim')
 
@@ -29,6 +26,8 @@ return require('packer').startup(function(use)
 	use('tpope/vim-fugitive')
 	use('tpope/vim-sleuth')
 	use('tpope/vim-commentary')
+
+	use('nvim-lualine/lualine.nvim')
 
 	use {
 		'VonHeikemen/lsp-zero.nvim',
@@ -52,6 +51,9 @@ return require('packer').startup(function(use)
 			-- Snippets
 			{ 'L3MON4D3/LuaSnip' },
 			{ 'rafamadriz/friendly-snippets' },
+
+			-- status
+			{ 'nvim-lua/lsp-status.nvim' },
 		}
 	}
 

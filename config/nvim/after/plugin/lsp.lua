@@ -1,5 +1,7 @@
 local lsp = require("lsp-zero")
 
+local lsp_status = require('lsp-status')
+lsp_status.register_progress()
 
 lsp.preset("recommended")
 
@@ -90,6 +92,7 @@ lsp.on_attach(function(client, bufnr)
     end
 
     require("lsp-inlayhints").on_attach(client, bufnr)
+    lsp_status.on_attach(client)
 
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
     vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
@@ -103,11 +106,12 @@ lsp.on_attach(function(client, bufnr)
     vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
 end)
 
-lsp.setup()
 
 vim.diagnostic.config({
     virtual_text = true,
 })
+
+lsp.setup()
 
 local rust_lsp = lsp.build_options('rust_analyzer', {
     single_file_support = false,
@@ -130,3 +134,5 @@ local rust_lsp = lsp.build_options('rust_analyzer', {
 })
 
 require('rust-tools').setup({ server = rust_lsp })
+
+
