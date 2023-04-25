@@ -7,7 +7,7 @@
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/mode", "custom/media"],
     "modules-center": ["sway/window"],
-    "modules-right": ["custom/vpn", "disk", "idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "temperature", "backlight", "keyboard-state", "battery", "battery#bat2", "clock", "tray"],
+    "modules-right": ["custom/schaf", "custom/vpn", "disk", "idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "temperature", "backlight", "keyboard-state", "battery", "battery#bat2", "clock", "tray"],
     // Modules configuration
     "sway/workspaces": {
         "disable-scroll": true,
@@ -192,6 +192,10 @@
         "exec": "~/.local/bin/vpnstatus",
         "return-type": "json",
         "interval": 2,
+    },
+    "custom/schaf": {
+        "exec": "~/src/3nt3/life360/statusbar/target/release/statusbar",
+        "interval": 10
     }
 }
 

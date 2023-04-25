@@ -214,9 +214,9 @@ workspace 20 output HDMI-A-1
     bindsym $mod+$up focus up
     bindsym $mod+$right focus right
 
-    bindsym $mod+Left exec playerctl -p spotify_player previous
-    bindsym $mod+Up exec playerctl -p spotify_player play-pause
-    bindsym $mod+Right exec playerctl -p spotify_player next
+    bindsym $mod+Left exec playerctl -p spotify previous
+    bindsym $mod+Up exec playerctl -p spotify play-pause
+    bindsym $mod+Right exec playerctl -p spotify next
 
     # Move the focused window with the same, but add Shift
     bindsym $mod+Shift+$left move left
