@@ -5,7 +5,7 @@ lsp.preset("recommended")
 lsp.ensure_installed({
     'tsserver',
     'eslint',
-    'sumneko_lua',
+    'lua_ls',
     'rust_analyzer',
     'tailwindcss',
 })
@@ -13,12 +13,21 @@ lsp.ensure_installed({
 lsp.configure('dartls')
 
 -- Fix Undefined global 'vim'
-lsp.configure('sumneko_lua', {
+lsp.configure('lua_ls', {
     settings = {
         Lua = {
             diagnostics = {
                 globals = { 'vim' }
             }
+        }
+    }
+})
+
+-- configure yaml ls
+lsp.configure('yamlls', {
+    settings = {
+        yaml = {
+            keyOrdering = false
         }
     }
 })

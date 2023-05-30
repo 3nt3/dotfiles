@@ -1,7 +1,7 @@
 * {
   border: none;
   border-radius: 0;
-  font-family: "SF Pro";
+  font-family: "SF Pro", "Font Awesome 5 Free Solid", "Font Awesome 5 Brands";
   font-size: 16px;
   min-height: 0;
   letter-spacing: -1px;
@@ -52,8 +52,9 @@ window#waybar {
 #custom-spotify,
 #tray,
 #mode {
-  padding: 0 0px;
-  margin: 0 0px;
+  padding: 0;
+  padding-right: 2px;
+  margin: 0px 5px;
 }
 
 #clock {

@@ -7,16 +7,17 @@
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/mode", "custom/media"],
     "modules-center": [],
-    "modules-right": ["custom/icespeed", "idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "temperature", "backlight", "keyboard-state", "battery", "battery#bat2", "clock", "tray"],
+    "modules-right": ["custom/icespeed", "pulseaudio", "network", "cpu", "memory", "temperature", "backlight", "keyboard-state", "battery", "battery#bat2", "clock", "tray"],
     // Modules configuration
     "sway/workspaces": {
         "disable-scroll": true,
         "format": "{name} {icon}",
         "format-icons": {
-            "1": "",
+            "1": "󰖟",
+            "2": "",
+            "3": "",
             "4": "",
             "5": "",
-            "2": "",
             "9": "",
             "urgent": "",
             "focused": "",
@@ -143,14 +144,14 @@
         // "scroll-step": 1, // %, can be a float
         "format": "{volume}% {icon} {format_source}",
         "format-bluetooth": "{volume}% {icon} {format_source}",
-        "format-bluetooth-muted": " {icon} {format_source}",
-        "format-muted": " {format_source}",
+        "format-bluetooth-muted": "󰝟 {icon} {format_source}",
+        "format-muted": "󰝟 {format_source}",
         "format-source": "{volume}% ",
         "format-source-muted": "",
         "format-icons": {
             "headphone": "",
-            "hands-free": "",
-            "headset": "",
+            "hands-free": "",
+            "headset": "󰋎",
             "phone": "",
             "portable": "",
             "car": "",
@@ -159,7 +160,7 @@
         "on-click": "pavucontrol"
     },
     "custom/media": {
-        "format": "{icon} {}",
+        "format": "{icon}  {}",
         "return-type": "json",
         "max-length": 40,
         "format-icons": {

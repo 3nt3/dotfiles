@@ -74,7 +74,18 @@ DISABLE_AUTO_TITLE="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git fzf stack command-not-found colored-man-pages zsh-syntax-highlighting flutter jump npm systemd docker docker-compose)
+plugins=(git
+    fzf
+    command-not-found
+    colored-man-pages
+    zsh-syntax-highlighting
+    flutter
+    jump
+    npm
+    systemd
+    docker
+    docker-compose
+    zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -288,6 +299,11 @@ source /usr/share/nvm/init-nvm.sh
 
 alias get_idf="source ~/esp/esp-idf/export.sh"
 
-export FZF_DEFAULT_COMMAND="fd . $HOME"
+export FZF_DEFAULT_COMMAND="fd . $HOME --hidden"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_ALT_C_COMMAND="fd -t d . $HOME"
+export FZF_ALT_C_COMMAND="fd -t d . $HOME --hidden"
+
+alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
+alias sudo='sudo '
+
+alias spt='spotify_player'
