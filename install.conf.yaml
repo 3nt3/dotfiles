@@ -45,11 +45,15 @@
       path: config/qutebrowser/config.py
     ~/.config/waybar:
       create: true
-<<<<<<< HEAD
-      path: config/nwg-drawer/drawer.css
-=======
-      path: config/waybar
->>>>>>> origin/desktop
     ~/.config/kitty/kitty.conf:
       create: true
       path: config/kitty/kitty.conf
+    ~/.config/yabai:
+      create: true
+      path: config/yabai
+    ~/.yabairc:
+      create: true
+      path: config/yabai/yabairc
+    ~/.skhdrc:
+      create: true
+      path: config/yabai/skhdrc

@@ -1,15 +1,10 @@
 [user]
 	email = gott@3nt3.de
 	name = 3nt3
-	signingkey = 36CC4B2F
-[commit]
-	gpgsign = true
 [init]
 	defaultBranch = main
 [pull]
 	rebase = false
-[gpg]
-	program = gpg
 [safe]
 	directory = /opt/flutter
 [core]
