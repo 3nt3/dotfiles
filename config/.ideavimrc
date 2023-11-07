@@ -1,0 +1,9 @@
+let mapleader="\<Space>"
+nmap <leader>ca <Action>(ShowIntentionActions)
+nmap <leader>f <Action>(ReformatCode)
+
+set nu
+set rnu
+set ideajoin
+
+nmap <leader>r :source ~/.ideavimrc<CR>

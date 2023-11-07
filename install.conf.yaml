@@ -57,3 +57,6 @@
     ~/.skhdrc:
       create: true
       path: config/yabai/skhdrc
+    ~/.ideavimrc:
+      create: true
+      path: config/.ideavimrc
