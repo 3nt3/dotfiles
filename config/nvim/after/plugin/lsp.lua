@@ -2,12 +2,14 @@ local lsp = require("lsp-zero")
 
 lsp.preset("recommended")
 
-lsp.ensure_installed({
-    'tsserver',
-    'eslint',
-    'lua_ls',
-    'rust_analyzer',
-    'tailwindcss',
+require('mason').setup({})
+require('mason-lspconfig').setup({
+    -- Replace the language servers listed here
+    -- with the ones you want to install
+    ensure_installed = { 'tsserver', 'rust_analyzer' },
+    handlers = {
+        lsp.default_setup,
+    },
 })
 
 lsp.configure('dartls')
@@ -32,9 +34,12 @@ lsp.configure('yamlls', {
     }
 })
 
+
 local cmp = require('cmp')
+local cmp_action = require('lsp-zero').cmp_action()
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
-local cmp_mappings = lsp.defaults.cmp_mappings({
+
+local cmp_mappings = cmp.mapping.preset.insert({
     ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
     ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
     ['<C-y>'] = cmp.mapping.confirm({ select = true }),
@@ -46,10 +51,6 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
 -- this helps with copilot setup
 cmp_mappings['<Tab>'] = nil
 cmp_mappings['<S-Tab>'] = nil
-
-lsp.setup_nvim_cmp({
-    mapping = cmp_mappings
-})
 
 lsp.set_preferences({
     suggest_lsp_servers = true,
@@ -103,7 +104,7 @@ lsp.format_on_save({
         ['rust_analyzer'] = { 'rust' },
         -- if you have a working setup with null-ls
         -- you can specify filetypes it can format.
-        -- ['null-ls'] = {'javascript', 'typescript'},
+        ['null-ls'] = { 'javascript', 'typescript', 'svelte' },
     }
 })
 
@@ -114,7 +115,38 @@ lsp.set_sign_icons({
     info = '»'
 })
 
+
+
+
 lsp.setup()
+
+local null_ls = require("null-ls")
+local prettier = require("prettier")
+
+prettier.setup({
+    bin = 'prettierd', -- or `'prettierd'` (v0.23.3+)
+    filetypes = {
+        "css",
+        "graphql",
+        "html",
+        "javascript",
+        "javascriptreact",
+        "json",
+        "less",
+        "markdown",
+        "scss",
+        "typescript",
+        "typescriptreact",
+        "yaml",
+    },
+})
+
+null_ls.setup({
+    debug = true,
+    sources = {
+        null_ls.builtins.formatting.prettier,
+    },
+})
 
 vim.diagnostic.config({
     virtual_text = true,
@@ -122,6 +154,7 @@ vim.diagnostic.config({
 
 
 cmp.setup({
+    mapping = cmp_mappings,
     sources = cmp.config.sources({
         { name = "nvim_lsp", group_index = 1 },
         { name = "luasnip",  trigger_characters = { "@" }, group_index = 1 },

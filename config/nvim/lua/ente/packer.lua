@@ -95,4 +95,8 @@ return require('packer').startup(function(use)
 
 
     use { 'kaarmu/typst.vim', ft = { 'typst' } }
+
+    -- null-ls
+    use { 'jose-elias-alvarez/null-ls.nvim' }
+    use { 'MunifTanjim/prettier.nvim' }
 end)
