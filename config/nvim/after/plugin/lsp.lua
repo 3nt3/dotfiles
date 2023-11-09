@@ -123,29 +123,36 @@ lsp.setup()
 local null_ls = require("null-ls")
 local prettier = require("prettier")
 
-prettier.setup({
-    bin = 'prettierd', -- or `'prettierd'` (v0.23.3+)
-    filetypes = {
-        "css",
-        "graphql",
-        "html",
-        "javascript",
-        "javascriptreact",
-        "json",
-        "less",
-        "markdown",
-        "scss",
-        "typescript",
-        "typescriptreact",
-        "yaml",
-    },
-})
+
+local prettier_filetypes = {
+    "css",
+    "graphql",
+    "html",
+    "javascript",
+    "javascriptreact",
+    "json",
+    "less",
+    "markdown",
+    "scss",
+    "typescript",
+    "typescriptreact",
+    "svelte",
+    "yaml",
+}
+
 
 null_ls.setup({
     debug = true,
     sources = {
-        null_ls.builtins.formatting.prettier,
+        null_ls.builtins.formatting.prettier.with({
+            filetypes = prettier_filetypes
+        }),
     },
+})
+
+prettier.setup({
+    bin = 'prettierd', -- or `'prettierd'` (v0.23.3+)
+    filetypes = prettier_filetypes,
 })
 
 vim.diagnostic.config({
