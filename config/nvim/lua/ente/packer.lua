@@ -20,13 +20,12 @@ return require('packer').startup(function(use)
     use({
         'rose-pine/neovim',
         as = 'rose-pine',
-        config = function()
-            require('rose-pine').setup({
-                dark_variant = 'dawn'
-            })
-            vim.cmd('colorscheme rose-pine')
-        end
     })
+
+    use {
+        'catppuccin/nvim',
+        as = 'catppuccin',
+    }
 
     use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
     use('nvim-treesitter/playground')
@@ -96,7 +95,13 @@ return require('packer').startup(function(use)
 
     use { 'kaarmu/typst.vim', ft = { 'typst' } }
 
-    -- null-ls
-    use { 'jose-elias-alvarez/null-ls.nvim' }
-    use { 'MunifTanjim/prettier.nvim' }
+
+    use { 'mhartington/formatter.nvim' }
+
+    use { 'mfussenegger/nvim-dap' }
+    use { 'rcarriga/nvim-dap-ui' }
+    use { 'pocco81/dap-buddy.nvim' }
+    use { 'theHamsta/nvim-dap-virtual-text' }
+    use "nvim-telescope/telescope-dap.nvim"
+    use { 'christoomey/vim-tmux-navigator' }
 end)
