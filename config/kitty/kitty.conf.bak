@@ -917,8 +917,6 @@ confirm_os_window_close 0
 
 #: Color scheme {{{
 
-kitten themes --reload-in=all Catppuccin-Mocha
-
 # foreground #dddddd
 # background #000000
 
@@ -2023,9 +2021,3 @@ map kitty_mod+/ launch --allow-remote-control kitty +kitten kitty_search/search.
 #: }}}
 
 #: }}}
-
-
-# BEGIN_KITTY_THEME
-# Catppuccin-Mocha
-include current-theme.conf
-# END_KITTY_THEME
