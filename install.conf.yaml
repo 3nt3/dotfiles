@@ -43,6 +43,7 @@
       reate: true
       path: config/qutebrowser/config.py
     ~/.config/waybar:
+      path: config/waybar
       create: true
     ~/.config/kitty/kitty.conf:
       create: true
@@ -59,3 +60,10 @@
     ~/.ideavimrc:
       create: true
       path: config/.ideavimrc
+    # hyprland
+    ~/.config/hypr:
+      create: true
+      path: config/hypr
+    ~/.icons/default:
+      create: true
+      path: icons/default

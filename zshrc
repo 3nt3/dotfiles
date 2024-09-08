@@ -4,7 +4,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/ente/.oh-my-zsh"
+export ZSH="/home/ente/.oh-my-zsh"
 
 bindkey -v
 # Set name of the theme to load --- if set to "random", it will
@@ -268,8 +268,6 @@ alias pwlo-on='pw-link "alsa_input.usb-Thomann_SC450USB-00.analog-stereo:capture
 
 chpwd() l
 
-eval $(thefuck --alias)
-
 alias v='nvim'
 source /usr/share/nvm/init-nvm.sh
 
@@ -293,3 +291,6 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+source /usr/share/nvm/init-nvm.sh
+
+alias sonybt='bluetoothctl power on && bluetoothctl connect AC:80:0A:09:02:CF'

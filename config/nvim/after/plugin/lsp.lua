@@ -6,7 +6,7 @@ require('mason').setup({})
 require('mason-lspconfig').setup({
     -- Replace the language servers listed here
     -- with the ones you want to install
-    ensure_installed = { 'tsserver', 'rust_analyzer' },
+    ensure_installed = { 'ts_ls', 'rust_analyzer' },
     handlers = {
         lsp.default_setup,
     },
@@ -32,6 +32,19 @@ lsp.configure('yamlls', {
             keyOrdering = false
         }
     }
+})
+
+-- configure java ls
+lsp.configure('jdtls', {
+    cmd = { "jdtls" },
+    --root_dir = lsp.util.root_pattern("pom.xml", "gradle.build"),
+    filetypes = { "java" }
+    -- init_options = {
+    --     bundles = {
+    --         vim.fn.glob("~/bin/jdtls/plugins/org.eclipse.equinox.weaving.*.jar"),
+    --         vim.fn.glob("~/bin/jdtls/plugins/org.aspectj.*.jar")
+    --     }
+    -- }
 })
 
 

@@ -1,1 +1,1 @@
-vim.g.typst_pdf_viewer = '/opt/homebrew/bin/zathura'
+vim.g.typst_pdf_viewer = 'zathura'

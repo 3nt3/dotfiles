@@ -14,6 +14,8 @@ input * {
 input type:touchpad {
     tap enabled
     natural_scroll enabled
+    click_method clickfinger
+    scroll_factor 0.5
 }
 
 
@@ -33,6 +35,7 @@ exec_always {
 exec_always systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec oguri &
 exec swayblur -b 10 &
+exec udiskie &
 
 exec export QT_QPA_PLATFORM=wayland
 exec export MOZ_ENABLE_WAYLAND=1
@@ -78,6 +81,8 @@ default_floating_border pixel 4
 #
 # Default wallpaper (more resolutions are available in /run/current-system/sw/share/backgrounds/sway/)
 # output * bg /run/current-system/sw/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+output eDP-1 scale 1.0
+
 output * bg ~/Pictures/wallpaper.jpg fill
 
 gaps inner 0
