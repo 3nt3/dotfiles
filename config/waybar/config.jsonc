@@ -110,8 +110,9 @@
 
     "clock": {
         "rotate": 0,
-        "format": "{󰃭 %d·%m·%y :%R}",
+        "format": "{:%T %F}",
         "tooltip-format": "<tt>{calendar}</tt>",
+        "interval": 1,
         "calendar": {
             "mode": "month",
             "mode-mon-col": 3,

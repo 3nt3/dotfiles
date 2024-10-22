@@ -1,6 +1,6 @@
     "clock": {
         "rotate": ${r_deg},
-        "format": "󰃭 %d·%m·%y :%R",
+        "format": "󰃭 {:%T %F}",
         "tooltip-format": "<tt>{calendar}</tt>",
         "calendar": {
             "mode": "month",
