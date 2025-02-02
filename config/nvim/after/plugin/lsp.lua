@@ -1,14 +1,30 @@
 local lsp = require("lsp-zero")
 
-lsp.preset("recommended")
+local lspconfig_defaults = require('lspconfig').util.default_config
+lspconfig_defaults.capabilities = vim.tbl_deep_extend(
+  'force',
+  lspconfig_defaults.capabilities,
+  require('cmp_nvim_lsp').default_capabilities()
+)
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
     -- Replace the language servers listed here
     -- with the ones you want to install
-    ensure_installed = { 'ts_ls', 'rust_analyzer' },
+    ensure_installed = { 'ts_ls', 'rust_analyzer', 'tinymist' },
     handlers = {
-        lsp.default_setup,
+        -- this first function is the "default handler"
+        -- it applies to every language server without a "custom handler"
+        function(server_name)
+          require('lspconfig')[server_name].setup({})
+        end,
+        tinymist = function()
+            require('lspconfig').tinymist.setup({
+                root_dir = function(filename, bufnr)
+                    return vim.fn.getcwd()
+                end,
+            })
+        end
     },
 })
 
@@ -48,6 +64,8 @@ lsp.configure('jdtls', {
 })
 
 
+
+
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
@@ -65,16 +83,16 @@ local cmp_mappings = cmp.mapping.preset.insert({
 cmp_mappings['<Tab>'] = nil
 cmp_mappings['<S-Tab>'] = nil
 
-lsp.set_preferences({
-    suggest_lsp_servers = true,
-    setup_servers_on_start = true,
-    sign_icons = {
-        error = 'E',
-        warn = 'W',
-        hint = 'H',
-        info = 'I'
-    }
-})
+-- lsp.set_preferences({
+--     suggest_lsp_servers = true,
+--     setup_servers_on_start = true,
+--     sign_icons = {
+--         error = 'E',
+--         warn = 'W',
+--         hint = 'H',
+--         info = 'I'
+--     }
+-- })
 
 lsp.on_attach(function(client, bufnr)
     local opts = { buffer = bufnr, remap = false }
