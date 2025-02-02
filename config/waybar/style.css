@@ -125,6 +125,7 @@ tooltip {
 #custom-sl_end,
 #custom-sr_end,
 #custom-rl_end,
+#custom-desk_lamp,
 #custom-rr_end {
     color: @main-fg;
     background: @main-bg;
@@ -174,3 +175,4 @@ tooltip {
     margin-left: 4px;
     padding-left: 0px;
 }
+
