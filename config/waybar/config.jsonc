@@ -6,7 +6,7 @@
     "layer": "top",
     "position": "top",
     "mod": "dock",
-    "height": 31,
+    "height": 16,
     "exclusive": true,
     "passthrough": false,
     "gtk-layer-shell": true,
@@ -110,8 +110,9 @@
 
     "clock": {
         "rotate": 0,
-        "format": "{󰃭 %d·%m·%y :%R}",
+        "format": "{:%F %T}",
         "tooltip-format": "<tt>{calendar}</tt>",
+        "interval": 1,
         "calendar": {
             "mode": "month",
             "mode-mon-col": 3,
@@ -148,8 +149,8 @@
 	"wlr/taskbar": {
 		"format": "{icon}",
 		"rotate": 0,
-		"icon-size": 18,
-		"icon-theme": "Tela-circle-dracula",
+		"icon-size": 16,
+		"icon-theme": "Tela-circle-green",
         "spacing": 0,
 		"tooltip-format": "{title}",
 		"on-click": "activate",
@@ -236,7 +237,7 @@
     },
 
     "tray": {
-        "icon-size": 18,
+        "icon-size": 12,
         "rotate": 0,
         "spacing": 5
     },
