@@ -17,7 +17,7 @@
 
 	"modules-left": ["custom/padd","custom/l_end","cpu","memory","custom/cpuinfo","custom/gpuinfo","custom/r_end","custom/l_end","idle_inhibitor","clock","custom/r_end","custom/l_end","hyprland/workspaces","custom/r_end","custom/padd"],
 	"modules-center": ["custom/padd","custom/l_end","wlr/taskbar","custom/r_end","custom/padd"],
-	"modules-right": ["custom/padd","custom/l_end", "custom/desk_lamp", "backlight","network","pulseaudio","pulseaudio#microphone","custom/updates","custom/keybindhint","custom/r_end","custom/l_end","tray","battery","custom/r_end","custom/l_end","custom/wallchange","custom/theme","custom/wbar","custom/cliphist","custom/power","custom/r_end","custom/padd"],
+	"modules-right": ["custom/padd","custom/l_end","custom/desk_lamp","backlight","network","pulseaudio","pulseaudio#microphone","custom/updates","custom/keybindhint","custom/r_end","custom/l_end","tray","battery","custom/r_end","custom/l_end","custom/wallchange","custom/theme","custom/wbar","custom/cliphist","custom/power","custom/r_end","custom/padd"],
 
 
 // sourced from modules based on config.ctl //
@@ -110,9 +110,8 @@
 
     "clock": {
         "rotate": 0,
-        "format": "{:%F %T}",
+        "format": "{:%F %R}",
         "tooltip-format": "<tt>{calendar}</tt>",
-        "interval": 1,
         "calendar": {
             "mode": "month",
             "mode-mon-col": 3,
@@ -150,7 +149,7 @@
 		"format": "{icon}",
 		"rotate": 0,
 		"icon-size": 16,
-		"icon-theme": "Tela-circle-green",
+		"icon-theme": "Tela-circle-pink",
         "spacing": 0,
 		"tooltip-format": "{title}",
 		"on-click": "activate",
@@ -163,6 +162,15 @@
 		}
 	},
 
+    "custom/desk_lamp": {
+        "format": "󰝩 {}",
+        "signal": 10,
+        "interval": 60,
+        "return-type": "json",
+        "exec-if": "sh -c '[ -e ~/.local/share/ha_token ]'",
+        "exec": "sh -c 'http -a $(< ~/.local/share/ha_token) -A bearer -j GET http://ha.wg.local/api/states/switch.desk_lamp_switch_4 | jq -c \"{text:.state, tooltip: (. | tojson)}\"'",
+        "on-click": "http -a $(< ~/.local/share/ha_token) -A bearer -j POST http://ha.wg.local/api/services/switch/toggle entity_id=switch.desk_lamp_switch_4 >/dev/null && pkill -SIGRTMIN+10 waybar"
+    },
     "backlight": {
         "device": "intel_backlight",
         "rotate": 0,
@@ -353,16 +361,7 @@
         "format": "  ",
         "interval" : "once",
         "tooltip": false
-    },
-
-    "custom/desk_lamp": {
-        "format": "󰝩 {}",
-        "signal": 10,
-        "interval": 60,
-        "return-type": "json",
-        "exec-if": "[ -e ~/.local/share/ha_token ]",
-        "exec": "http -a $(< ~/.local/share/ha_token) -A bearer -j GET homeassistant:8123/api/states/switch.desk_lamp_switch_4 | jq -c '{text:.state, tooltip: (. | tojson)}'",
-        "on-click": "http -a $(< ~/.local/share/ha_token) -A bearer -j POST homeassistant:8123/api/services/switch/toggle entity_id=switch.desk_lamp_switch_4 >/dev/null && pkill -SIGRTMIN+10 waybar"
     }
+
 }
 

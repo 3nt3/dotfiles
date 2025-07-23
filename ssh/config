@@ -10,3 +10,11 @@ Host vm100
 Host pve
     HostName pve
     User root
+
+Host storagebox
+    HostName u461072.your-storagebox.de
+    User u461072
+
+Host aur.archlinux.org
+    IdentityFile ~/.ssh/aur
+    User aur
