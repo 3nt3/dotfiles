@@ -10,3 +10,7 @@ Host vm100
 Host pve
     HostName pve
     User root
+
+Host tc_hop
+    ProxyJump 3nt3
+    HostName 10.69.0.2

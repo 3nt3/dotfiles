@@ -1,0 +1,5 @@
+"custom/balance": {
+    "interval": 3600,
+    "exec": "/home/ente/src/3nt3/balance-notifications/venv/bin/python3 /home/ente/src/3nt3/balance-notifications/main.py",
+    "return-type": "json"
+},

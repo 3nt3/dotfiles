@@ -2,9 +2,9 @@ local lsp = require("lsp-zero")
 
 local lspconfig_defaults = require('lspconfig').util.default_config
 lspconfig_defaults.capabilities = vim.tbl_deep_extend(
-  'force',
-  lspconfig_defaults.capabilities,
-  require('cmp_nvim_lsp').default_capabilities()
+    'force',
+    lspconfig_defaults.capabilities,
+    require('cmp_nvim_lsp').default_capabilities()
 )
 
 require('mason').setup({})
@@ -16,7 +16,7 @@ require('mason-lspconfig').setup({
         -- this first function is the "default handler"
         -- it applies to every language server without a "custom handler"
         function(server_name)
-          require('lspconfig')[server_name].setup({})
+            require('lspconfig')[server_name].setup({})
         end,
         tinymist = function()
             require('lspconfig').tinymist.setup({
@@ -63,7 +63,15 @@ lsp.configure('jdtls', {
     -- }
 })
 
-
+lsp.configure('html', {
+    settings = {
+        html = {
+            format = {
+                unformattedContentDelimiter = "<!-- noformat -->",
+            }
+        }
+    }
+})
 
 
 local cmp = require('cmp')
@@ -114,6 +122,7 @@ lsp.on_attach(function(client, bufnr)
     vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
     vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
     vim.keymap.set("x", "<leader>ca", vim.lsp.buf.code_action, opts)
+    vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, opts)
 
     local function quickfix()
         vim.lsp.buf.code_action({
