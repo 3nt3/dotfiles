@@ -1,0 +1,9 @@
+    "custom/desk_lamp": {
+        "format": "󰝩 {}",
+        "signal": 10,
+        "interval": 60,
+        "return-type": "json",
+        "exec-if": "sh -c '[ -e ~/.local/share/ha_token ]'",
+        "exec": "sh -c 'http -a $(< ~/.local/share/ha_token) -A bearer -j GET http://ha.wg.local/api/states/switch.desk_lamp_switch_4 | jq -c \"{text:.state, tooltip: (. | tojson)}\"'",
+        "on-click": "http -a $(< ~/.local/share/ha_token) -A bearer -j POST http://ha.wg.local/api/services/switch/toggle entity_id=switch.desk_lamp_switch_4 >/dev/null && pkill -SIGRTMIN+10 waybar"
+    },

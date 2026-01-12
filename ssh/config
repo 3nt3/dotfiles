@@ -14,3 +14,11 @@ Host pve
 Host tc_hop
     ProxyJump 3nt3
     HostName 10.69.0.2
+
+Host storagebox
+    HostName u461072.your-storagebox.de
+    User u461072
+
+Host aur.archlinux.org
+    IdentityFile ~/.ssh/aur
+    User aur

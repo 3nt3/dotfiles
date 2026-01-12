@@ -1,0 +1,6 @@
+    "custom/days_to_vacation": {
+        "format": "vac: {}",
+        "interval": 60,
+        "return-type": "json",
+        "exec": "~/.local/bin/days_to_vacation.sh",
+    },

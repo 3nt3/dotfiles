@@ -122,7 +122,11 @@ lsp.on_attach(function(client, bufnr)
     vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
     vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
     vim.keymap.set("x", "<leader>ca", vim.lsp.buf.code_action, opts)
+<<<<<<< HEAD
     vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, opts)
+=======
+    vim.keymap.set("n", "<leader>f", vim.lsp.buf.format { async = true }, opts)
+>>>>>>> b6158e4c692369c9212c2eea87d091f0fdd2fc67
 
     local function quickfix()
         vim.lsp.buf.code_action({
@@ -146,6 +150,7 @@ lsp.format_on_save({
         -- if you have a working setup with null-ls
         -- you can specify filetypes it can format.
         ['null-ls'] = { 'javascript', 'typescript', 'svelte' },
+        ['clangd'] = { 'c', 'cpp' },
     }
 })
 
