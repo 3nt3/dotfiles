@@ -1,195 +1,214 @@
-local lsp = require("lsp-zero")
+-- Modern Neovim LSP Configuration (0.10+)
 
-local lspconfig_defaults = require('lspconfig').util.default_config
-lspconfig_defaults.capabilities = vim.tbl_deep_extend(
+-- Setup capabilities for nvim-cmp
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = vim.tbl_deep_extend(
     'force',
-    lspconfig_defaults.capabilities,
+    capabilities,
     require('cmp_nvim_lsp').default_capabilities()
 )
 
+-- Setup Mason
 require('mason').setup({})
 require('mason-lspconfig').setup({
-    -- Replace the language servers listed here
-    -- with the ones you want to install
-    ensure_installed = { 'ts_ls', 'rust_analyzer', 'tinymist' },
+    ensure_installed = { 'ts_ls', 'rust_analyzer', 'tinymist', 'lua_ls', 'yamlls', 'jdtls', 'html', 'dartls' },
     handlers = {
-        -- this first function is the "default handler"
-        -- it applies to every language server without a "custom handler"
+        -- Default handler for all servers
         function(server_name)
-            require('lspconfig')[server_name].setup({})
+            require('lspconfig')[server_name].setup({
+                capabilities = capabilities,
+            })
         end,
+
+        -- Custom handler for tinymist
         tinymist = function()
             require('lspconfig').tinymist.setup({
+                capabilities = capabilities,
                 root_dir = function(filename, bufnr)
                     return vim.fn.getcwd()
                 end,
             })
+        end,
+
+        -- Custom handler for lua_ls
+        lua_ls = function()
+            require('lspconfig').lua_ls.setup({
+                capabilities = capabilities,
+                settings = {
+                    Lua = {
+                        diagnostics = {
+                            globals = { 'vim' }
+                        }
+                    }
+                }
+            })
+        end,
+
+        -- Custom handler for yamlls
+        yamlls = function()
+            require('lspconfig').yamlls.setup({
+                capabilities = capabilities,
+                settings = {
+                    yaml = {
+                        keyOrdering = false
+                    }
+                }
+            })
+        end,
+
+        -- Custom handler for jdtls
+        jdtls = function()
+            require('lspconfig').jdtls.setup({
+                capabilities = capabilities,
+                cmd = { "jdtls" },
+                filetypes = { "java" }
+            })
+        end,
+
+        -- Custom handler for html
+        html = function()
+            require('lspconfig').html.setup({
+                capabilities = capabilities,
+                settings = {
+                    html = {
+                        format = {
+                            unformattedContentDelimiter = "<!-- noformat -->",
+                        }
+                    }
+                }
+            })
+        end,
+
+        -- Custom handler for dartls
+        dartls = function()
+            require('lspconfig').dartls.setup({
+                capabilities = capabilities,
+            })
+        end,
+    },
+})
+
+-- LSP Keybindings
+vim.api.nvim_create_autocmd('LspAttach', {
+    desc = 'LSP actions',
+    callback = function(event)
+        local opts = { buffer = event.buf, remap = false }
+        local client = vim.lsp.get_client_by_id(event.data.client_id)
+
+        -- Stop eslint if attached
+        if client and client.name == "eslint" then
+            vim.cmd.LspStop('eslint')
+            return
         end
-    },
-})
 
-lsp.configure('dartls')
+        -- Navigation
+        vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+        vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+        vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 
--- Fix Undefined global 'vim'
-lsp.configure('lua_ls', {
-    settings = {
-        Lua = {
-            diagnostics = {
-                globals = { 'vim' }
-            }
-        }
-    }
-})
+        -- Workspace
+        vim.keymap.set("n", "<leader>vws", vim.lsp.buf.workspace_symbol, opts)
 
--- configure yaml ls
-lsp.configure('yamlls', {
-    settings = {
-        yaml = {
-            keyOrdering = false
-        }
-    }
-})
+        -- Diagnostics
+        vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, opts)
+        vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+        vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 
--- configure java ls
-lsp.configure('jdtls', {
-    cmd = { "jdtls" },
-    --root_dir = lsp.util.root_pattern("pom.xml", "gradle.build"),
-    filetypes = { "java" }
-    -- init_options = {
-    --     bundles = {
-    --         vim.fn.glob("~/bin/jdtls/plugins/org.eclipse.equinox.weaving.*.jar"),
-    --         vim.fn.glob("~/bin/jdtls/plugins/org.aspectj.*.jar")
-    --     }
-    -- }
-})
+        -- Actions
+        vim.keymap.set("n", "<leader>vrr", vim.lsp.buf.references, opts)
+        vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+        vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
+        vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+        vim.keymap.set("x", "<leader>ca", vim.lsp.buf.code_action, opts)
 
-lsp.configure('html', {
-    settings = {
-        html = {
-            format = {
-                unformattedContentDelimiter = "<!-- noformat -->",
-            }
-        }
-    }
-})
+        -- Formatting
+        vim.keymap.set("n", "<leader>f", function()
+            vim.lsp.buf.format({ async = true })
+        end, opts)
 
-
-local cmp = require('cmp')
-local cmp_action = require('lsp-zero').cmp_action()
-local cmp_select = { behavior = cmp.SelectBehavior.Select }
-
-local cmp_mappings = cmp.mapping.preset.insert({
-    ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-    ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-    ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-    ["<C-Space>"] = cmp.mapping.complete(),
-    ['<CR>'] = cmp.mapping.confirm({ select = true })
-})
-
--- disable completion with tab
--- this helps with copilot setup
-cmp_mappings['<Tab>'] = nil
-cmp_mappings['<S-Tab>'] = nil
-
--- lsp.set_preferences({
---     suggest_lsp_servers = true,
---     setup_servers_on_start = true,
---     sign_icons = {
---         error = 'E',
---         warn = 'W',
---         hint = 'H',
---         info = 'I'
---     }
--- })
-
-lsp.on_attach(function(client, bufnr)
-    local opts = { buffer = bufnr, remap = false }
-
-    if client.name == "eslint" then
-        vim.cmd.LspStop('eslint')
-        return
+        -- Quickfix
+        vim.keymap.set('n', '<leader>qf', function()
+            vim.lsp.buf.code_action({
+                only = { "quickfix" },
+            })
+        end, opts)
     end
-
-    vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-    vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-    vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-    vim.keymap.set("n", "<leader>vws", vim.lsp.buf.workspace_symbol, opts)
-    vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, opts)
-    vim.keymap.set("n", "[d", vim.diagnostic.goto_next, opts)
-    vim.keymap.set("n", "]d", vim.diagnostic.goto_prev, opts)
-    vim.keymap.set("n", "<leader>vrr", vim.lsp.buf.references, opts)
-    vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-    vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
-    vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-    vim.keymap.set("x", "<leader>ca", vim.lsp.buf.code_action, opts)
-<<<<<<< HEAD
-    vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, opts)
-=======
-    vim.keymap.set("n", "<leader>f", vim.lsp.buf.format { async = true }, opts)
->>>>>>> b6158e4c692369c9212c2eea87d091f0fdd2fc67
-
-    local function quickfix()
-        vim.lsp.buf.code_action({
-            only = { "quickfix" },
-        })
-    end
-
-    vim.keymap.set('n', '<leader>qf', quickfix, opts)
-
-    -- Open code actions using the default lsp UI, if you want to change this please see the plugins above
-end)
-
-lsp.format_on_save({
-    format_opts = {
-        async = false,
-        timeout_ms = 10000,
-    },
-    servers = {
-        ['lua_ls'] = { 'lua' },
-        ['rust_analyzer'] = { 'rust' },
-        -- if you have a working setup with null-ls
-        -- you can specify filetypes it can format.
-        ['null-ls'] = { 'javascript', 'typescript', 'svelte' },
-        ['clangd'] = { 'c', 'cpp' },
-    }
 })
 
-lsp.set_sign_icons({
-    error = '✘',
-    warn = '▲',
-    hint = '⚑',
-    info = '»'
+-- Format on save
+vim.api.nvim_create_autocmd('BufWritePre', {
+    pattern = { '*.lua', '*.rs', '*.js', '*.ts', '*.svelte', '*.c', '*.cpp' },
+    callback = function(args)
+        local client = vim.lsp.get_clients({ bufnr = args.buf })[1]
+        if client then
+            vim.lsp.buf.format({
+                async = false,
+                timeout_ms = 10000,
+                bufnr = args.buf,
+            })
+        end
+    end,
 })
 
-lsp.setup()
+-- Diagnostic signs
+vim.fn.sign_define('DiagnosticSignError', { text = '✘', texthl = 'DiagnosticSignError' })
+vim.fn.sign_define('DiagnosticSignWarn', { text = '▲', texthl = 'DiagnosticSignWarn' })
+vim.fn.sign_define('DiagnosticSignHint', { text = '⚑', texthl = 'DiagnosticSignHint' })
+vim.fn.sign_define('DiagnosticSignInfo', { text = '»', texthl = 'DiagnosticSignInfo' })
 
+-- Diagnostic configuration
 vim.diagnostic.config({
     virtual_text = true,
+    signs = true,
+    update_in_insert = false,
+    underline = true,
+    severity_sort = true,
+    float = {
+        border = 'rounded',
+        source = 'always',
+    },
 })
 
+-- nvim-cmp setup
+local cmp = require('cmp')
 
 cmp.setup({
-    mapping = cmp_mappings,
+    mapping = cmp.mapping.preset.insert({
+        ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+        ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+        ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        -- Disable Tab/Shift-Tab for copilot compatibility
+        ['<Tab>'] = nil,
+        ['<S-Tab>'] = nil,
+    }),
     sources = cmp.config.sources({
         { name = "nvim_lsp", group_index = 1 },
-        { name = "luasnip",  trigger_characters = { "@" }, group_index = 1 },
-        { name = "buffer",   group_index = 2 },
-    })
+        { name = "luasnip", trigger_characters = { "@" }, group_index = 1 },
+        { name = "buffer", group_index = 2 },
+    }),
+    snippet = {
+        expand = function(args)
+            require('luasnip').lsp_expand(args.body)
+        end,
+    },
 })
 
+-- Load snippets
 require("luasnip.loaders.from_vscode").lazy_load()
 
-require("flutter-tools").setup {} -- use defaults
+-- Flutter tools
+require("flutter-tools").setup({})
 
--- jupyter
+-- Jupyter/Magma keybindings
+vim.keymap.set('n', '<LocalLeader>r', ':MagmaEvaluateOperator<CR>', { silent = true, expr = true })
+vim.keymap.set('n', '<LocalLeader>rr', ':MagmaEvaluateLine<CR>', { silent = true })
+vim.keymap.set('x', '<LocalLeader>r', ':<C-u>MagmaEvaluateVisual<CR>', { silent = true })
+vim.keymap.set('n', '<LocalLeader>rc', ':MagmaReevaluateCell<CR>', { silent = true })
+vim.keymap.set('n', '<LocalLeader>rd', ':MagmaDelete<CR>', { silent = true })
+vim.keymap.set('n', '<LocalLeader>ro', ':MagmaShowOutput<CR>', { silent = true })
 
-vim.api.nvim_set_keymap('n', '<LocalLeader>r', ':MagmaEvaluateOperator<CR>', { silent = true, expr = true })
-vim.api.nvim_set_keymap('n', '<LocalLeader>rr', ':MagmaEvaluateLine<CR>', { silent = true })
-vim.api.nvim_set_keymap('x', '<LocalLeader>r', ':<C-u>MagmaEvaluateVisual<CR>', { silent = true })
-vim.api.nvim_set_keymap('n', '<LocalLeader>rc', ':MagmaReevaluateCell<CR>', { silent = true })
-vim.api.nvim_set_keymap('n', '<LocalLeader>rd', ':MagmaDelete<CR>', { silent = true })
-vim.api.nvim_set_keymap('n', '<LocalLeader>ro', ':MagmaShowOutput<CR>', { silent = true })
-
--- Settings
+-- Magma settings
 vim.g.magma_automatically_open_output = false
 vim.g.magma_image_provider = "kitty"
