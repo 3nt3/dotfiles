@@ -12,9 +12,6 @@
     ~/.config/nvim:
       create: true
       path: config/nvim
-    ~/.config/bspwm:
-      create: true
-      path: config/bspwm
     ~/.config/polybar:
       create: true
       path: config/polybar
@@ -60,13 +57,15 @@
     ~/.ideavimrc:
       create: true
       path: config/.ideavimrc
-    # hyprland
-    ~/.config/hypr:
-      create: true
-      path: config/hypr
     ~/.icons/default:
       create: true
       path: icons/default
     ~/.config/tmux:
       create: true
       path: config/tmux
+    ~/.config/niri:
+      create: true
+      path: config/niri
+    ~/.config/mako:
+      create: true
+      path: config/mako
