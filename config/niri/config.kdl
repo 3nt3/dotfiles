@@ -121,7 +121,9 @@ layout {
     // - "always", the focused column will always be centered.
     // - "on-overflow", focusing a column will center it if it doesn't fit
     //   together with the previously focused column.
-    center-focused-column "never"
+    center-focused-column "on-overflow"
+
+    background-color "transparent"
 
     // You can customize the widths that "switch-preset-column-width" (Mod+R) toggles between.
     preset-column-widths {
@@ -624,8 +626,14 @@ binds {
 }
 
 layer-rule {
-    match namespace="^quickshell$"
+    match namespace="^wallpaper$"
     place-within-backdrop true
+}
+
+
+window-rule {
+  match app-id="^(kitty|cinny|signal)$"
+  opacity 0.8
 }
 
 // Add to the end of ~/.config/niri/config.kdl
