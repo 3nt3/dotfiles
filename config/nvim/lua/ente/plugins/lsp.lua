@@ -59,26 +59,34 @@ return {
                     -- Navigation
                     map("n", "gd", vim.lsp.buf.definition, vim.tbl_extend("force", opts, { desc = "Go to definition" }))
                     map("n", "gr", vim.lsp.buf.references, vim.tbl_extend("force", opts, { desc = "Go to references" }))
-                    map("n", "gI", vim.lsp.buf.implementation, vim.tbl_extend("force", opts, { desc = "Go to implementation" }))
-                    map("n", "gy", vim.lsp.buf.type_definition, vim.tbl_extend("force", opts, { desc = "Go to type definition" }))
+                    map("n", "gI", vim.lsp.buf.implementation,
+                        vim.tbl_extend("force", opts, { desc = "Go to implementation" }))
+                    map("n", "gy", vim.lsp.buf.type_definition,
+                        vim.tbl_extend("force", opts, { desc = "Go to type definition" }))
                     map("n", "gD", vim.lsp.buf.declaration, vim.tbl_extend("force", opts, { desc = "Go to declaration" }))
 
                     -- Hover
                     map("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "Hover documentation" }))
-                    map("i", "<C-h>", vim.lsp.buf.signature_help, vim.tbl_extend("force", opts, { desc = "Signature help" }))
+                    map("i", "<C-h>", vim.lsp.buf.signature_help,
+                        vim.tbl_extend("force", opts, { desc = "Signature help" }))
 
                     -- Workspace
-                    map("n", "<leader>vws", vim.lsp.buf.workspace_symbol, vim.tbl_extend("force", opts, { desc = "Workspace symbol" }))
+                    map("n", "<leader>vws", vim.lsp.buf.workspace_symbol,
+                        vim.tbl_extend("force", opts, { desc = "Workspace symbol" }))
 
                     -- Diagnostics
-                    map("n", "<leader>vd", vim.diagnostic.open_float, vim.tbl_extend("force", opts, { desc = "Open diagnostic float" }))
-                    map("n", "[d", vim.diagnostic.goto_prev, vim.tbl_extend("force", opts, { desc = "Previous diagnostic" }))
+                    map("n", "<leader>vd", vim.diagnostic.open_float,
+                        vim.tbl_extend("force", opts, { desc = "Open diagnostic float" }))
+                    map("n", "[d", vim.diagnostic.goto_prev,
+                        vim.tbl_extend("force", opts, { desc = "Previous diagnostic" }))
                     map("n", "]d", vim.diagnostic.goto_next, vim.tbl_extend("force", opts, { desc = "Next diagnostic" }))
-                    map("n", "<leader>dl", vim.diagnostic.setloclist, vim.tbl_extend("force", opts, { desc = "Diagnostic list" }))
+                    map("n", "<leader>dl", vim.diagnostic.setloclist,
+                        vim.tbl_extend("force", opts, { desc = "Diagnostic list" }))
 
                     -- Actions
                     map("n", "<leader>rn", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "Rename" }))
-                    map({ "n", "x" }, "<leader>ca", vim.lsp.buf.code_action, vim.tbl_extend("force", opts, { desc = "Code action" }))
+                    map({ "n", "x" }, "<leader>ca", vim.lsp.buf.code_action,
+                        vim.tbl_extend("force", opts, { desc = "Code action" }))
                     map("n", "<leader>qf", function()
                         vim.lsp.buf.code_action({ only = { "quickfix" } })
                     end, vim.tbl_extend("force", opts, { desc = "Quickfix" }))
@@ -192,7 +200,6 @@ return {
                         },
                     },
                 },
-                dartls = {},
             }
 
             -- Setup Mason LSPConfig

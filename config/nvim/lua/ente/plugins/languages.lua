@@ -140,6 +140,9 @@ return {
                     typescript = {
                         require("formatter.filetypes.typescript").prettier,
                     },
+                    html = {
+                        require("formatter.filetypes.html").prettier,
+                    },
                     ["*"] = {
                         require("formatter.filetypes.any").remove_trailing_whitespace,
                     },

@@ -5,11 +5,14 @@ return {
     build = ":TSUpdate",
     event = { "BufReadPost", "BufNewFile" },
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
+    config = function(_, opts)
+        require("nvim-treesitter.configs").setup(opts)
+    end,
     opts = {
         ensure_installed = {
             "bash", "c", "cpp", "css", "dart", "html", "java",
             "javascript", "json", "lua", "markdown", "markdown_inline",
-            "python", "rust", "tsx", "typescript", "vim", "vimdoc", "yaml",
+            "python", "rust", "tsx", "typescript", "vim", "vimdoc", "yaml", "svelte", "go"
         },
         sync_install = false,
         auto_install = true,
