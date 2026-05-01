@@ -1,6 +1,7 @@
 -- Telescope Plugin Specification
 return {
     "nvim-telescope/telescope.nvim",
+    branch = "0.1.x",
     dependencies = {
         "nvim-lua/plenary.nvim",
         {
@@ -14,23 +15,19 @@ return {
     },
     cmd = "Telescope",
     keys = {
-        { ";",               "<cmd>Telescope find_files<cr>", desc = "Find files" },
-        { "<C-p>",           "<cmd>Telescope git_files<cr>",  desc = "Find git files" },
-        { "<leader><space>", "<cmd>Telescope buffers<cr>",    desc = "Find buffers" },
-        {
-            "<leader>sg",
-            function()
-                require("telescope.builtin").grep_string({
-                    search = vim.fn.input("Grep > ")
-                })
-            end,
-            desc = "Grep search"
-        },
-        { "<leader>sh", "<cmd>Telescope help_tags<cr>",   desc = "Help tags" },
-        { "<leader>sk", "<cmd>Telescope keymaps<cr>",     desc = "Keymaps" },
+        { ";", "<cmd>Telescope find_files<cr>", desc = "Find files" },
+        { "<C-p>", "<cmd>Telescope git_files<cr>", desc = "Find git files" },
+        { "<leader><space>", "<cmd>Telescope buffers<cr>", desc = "Find buffers" },
+        { "<leader>sg", function()
+            require("telescope.builtin").grep_string({
+                search = vim.fn.input("Grep > ")
+            })
+        end, desc = "Grep search" },
+        { "<leader>sh", "<cmd>Telescope help_tags<cr>", desc = "Help tags" },
+        { "<leader>sk", "<cmd>Telescope keymaps<cr>", desc = "Keymaps" },
         { "<leader>sw", "<cmd>Telescope grep_string<cr>", desc = "Search current word" },
         { "<leader>sd", "<cmd>Telescope diagnostics<cr>", desc = "Search diagnostics" },
-        { "<leader>sr", "<cmd>Telescope resume<cr>",      desc = "Resume last search" },
+        { "<leader>sr", "<cmd>Telescope resume<cr>", desc = "Resume last search" },
     },
     config = function()
         local telescope = require("telescope")
@@ -87,6 +84,6 @@ return {
 
         -- Load extensions
         pcall(telescope.load_extension, "fzf")
-        -- pcall(telescope.load_extension, "dap")
+        pcall(telescope.load_extension, "dap")
     end,
 }

@@ -121,7 +121,7 @@ layout {
     // - "always", the focused column will always be centered.
     // - "on-overflow", focusing a column will center it if it doesn't fit
     //   together with the previously focused column.
-    center-focused-column "on-overflow"
+    center-focused-column "never"
 
     background-color "transparent"
 
@@ -274,6 +274,8 @@ layout {
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
 
+spawn-sh-at-startup "sudo renice -16 $(pgrep niri)"
+
 hotkey-overlay {
     // Uncomment this line to disable the "Important Hotkeys" pop-up at startup.
     skip-at-startup
@@ -368,6 +370,7 @@ binds {
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
 
     Mod+Shift+W hotkey-overlay-title="Open a Web Browser: firefox" { spawn "firefox-developer-edition"; }
+    Mod+E hotkey-overlay-title="Open a File Explorer: thunar" { spawn "thunar"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
@@ -631,10 +634,10 @@ layer-rule {
 }
 
 
-window-rule {
-  match app-id="^(kitty|cinny|signal)$"
-  opacity 0.8
-}
+// window-rule {
+//   match app-id="^(kitty|cinny|signal)$"
+//   opacity 0.8
+// }
 
 // Add to the end of ~/.config/niri/config.kdl
 include "dms/colors.kdl"

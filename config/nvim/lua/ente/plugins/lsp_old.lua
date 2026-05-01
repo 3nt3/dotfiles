@@ -18,15 +18,12 @@ return {
             },
         },
     },
-    {
-        "neovim/nvim-lspconfig",
-    },
+
     {
         "williamboman/mason-lspconfig.nvim",
         lazy = false,
         dependencies = {
             "williamboman/mason.nvim",
-            "neovim/nvim-lspconfig",
             "hrsh7th/cmp-nvim-lsp",
             { "j-hui/fidget.nvim", opts = {} },
         },
@@ -69,8 +66,10 @@ return {
 
             -- Server configurations
             -- vim.lsp.config("ts_ls", { capabilities = capabilities, cmd = { "typescript-language-server", "--stdio" } })
-            -- vim.lsp.config("svelte", { capabilities = capabilities, cmd = { "svelteserver", "--stdio" },  cmd_env = { CHOKIDAR_USEPOLLING = "1" },
-            -- vim.lsp.config("rust_analyzer", { capabilities = capabilities })
+            vim.lsp.config("tailwindcss", { capabilities = capabilities })
+            vim.lsp.config("svelte", { capabilities = capabilities, cmd = { "svelteserver", "--stdio" },  cmd_env = { CHOKIDAR_USEPOLLING = "1" },
+        })
+            vim.lsp.config("rust_analyzer", { capabilities = capabilities })
             vim.lsp.config("tinymist", {
                 capabilities = capabilities,
                 root_dir = function()
@@ -119,6 +118,10 @@ return {
                     },
                 },
             })
+
+            vim.lsp.config("gopls", { capabilities = capabilities })
+
+            vim.lsp.config("prettier", { capabilities = capabilities })
 
             -- Ensure Mason installs the servers
             require("mason-lspconfig").setup({

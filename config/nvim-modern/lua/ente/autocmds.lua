@@ -94,26 +94,3 @@ autocmd("BufEnter", {
 function _G.R(name)
     require("plenary.reload").reload_module(name)
 end
-
--- Enable treesitter and lsp
-autocmd("FileType", {
-    group = general,
-    pattern = {
-        "html",
-        "svelte",
-        "typescript",
-        "go",
-        "python",
-        "rust",
-        "c"
-    },
-    callback = function()
-        vim.treesitter.start()
-        vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-
-        -- vim.wo.foldmethod = 'expr'
-        -- indentation, provided by nvim-treesitter
-        vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-    end,
-})
-
