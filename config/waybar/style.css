@@ -360,3 +360,7 @@ label:focus {
 #custom-niri-window {
     font-weight: bold;
 }
+
+#custom-balance {
+    margin: 5px;
+}
