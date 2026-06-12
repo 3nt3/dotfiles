@@ -24,7 +24,6 @@
   "modules-right": [
     "custom/padd",
     "custom/l_end",
-    "custom/apprenticeship-countdown",
     "custom/balance",
     "backlight",
     "network",
@@ -385,11 +384,5 @@
     "format": "  {}",
     "max-length": 50,
     "tooltip": false
-  },
-  "custom/apprenticeship-countdown": {
-    "exec": "/home/ente/src/3nt3/ausbildung-countdown/target/debug/ausbildung-countdown",
-    "interval": 60,
-    "format": "{}",
-    "return-type": "json"
   }
 }
