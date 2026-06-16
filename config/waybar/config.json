@@ -24,6 +24,7 @@
   "modules-right": [
     "custom/padd",
     "custom/l_end",
+    "custom/disk-space",
     "custom/balance",
     "backlight",
     "network",
@@ -384,5 +385,11 @@
     "format": "  {}",
     "max-length": 50,
     "tooltip": false
+  },
+  "custom/disk-space": {
+    "exec": "df -h / | awk 'NR==2 {printf \"{\\\"text\\\":\\\"%s\\\",\\\"tooltip\\\":\\\"💻 Root Partition\\\\n--------------------\\\\nTotal Size:  %s\\\\nUsed:        %s (%s)\\\\nAvailable:   %s\\\"}\\n\", $4, $2, $3, $5, $4}'",
+    "return-type": "json",
+    "interval": 60,
+    "format": "💾 {}"
   }
 }
