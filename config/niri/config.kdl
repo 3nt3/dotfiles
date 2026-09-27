@@ -274,6 +274,8 @@ layout {
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
 
+// spawn-sh-at-startup "cd ~/src/3nt3/niri-widgets/ && ./target/release/niri-widgets"
+
 spawn-sh-at-startup "sudo renice -16 $(pgrep niri)"
 
 hotkey-overlay {
@@ -631,6 +633,10 @@ binds {
 layer-rule {
     match namespace="^wallpaper$"
     place-within-backdrop true
+}
+
+environment {
+    QT_QPA_PLATFORMTHEME "gtk3"
 }
 
 

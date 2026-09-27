@@ -9,6 +9,17 @@ return {
             { "<leader>gb", "<cmd>Git blame<cr>",  desc = "Git blame" },
             { "<leader>gd", "<cmd>Gdiffsplit<cr>", desc = "Git diff" },
         },
+        config = function()
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = "fugitive",
+                callback = function(event)
+                    vim.keymap.set("n", "<leader>p", "<cmd>Git push<cr>", {
+                        buffer = event.buf,
+                        desc = "Git push",
+                    })
+                end,
+            })
+        end,
     },
 
     -- Git signs
