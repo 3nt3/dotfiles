@@ -1,16 +1,15 @@
 layout {
     background-color "transparent"
 
+
     focus-ring {
-        active-color   "#42a5f5"
-        inactive-color "#8c9199"
-        urgent-color   "#f2b8b5"
+        active-color "#c2a35a"
+        inactive-color "#243229"
     }
 
     border {
-        active-color   "#42a5f5"
-        inactive-color "#8c9199"
-        urgent-color   "#f2b8b5"
+        active-color "#c2a35a"
+        inactive-color "#243229"
     }
 
     shadow {

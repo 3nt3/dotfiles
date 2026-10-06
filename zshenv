@@ -10,4 +10,6 @@ PATH="$PATH:/opt/android-sdk/build-tools/34.0.0"
 PATH="$PATH:/opt/android-sdk/emulator"
 PATH="$PATH:/opt/android-sdk/cmdline-tools/latest/bin"
 
+PATH="$PATH:$HOME/.local/share/pnpm/bin"
+
 . "$HOME/.cargo/env"
