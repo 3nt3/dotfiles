@@ -19,6 +19,15 @@ autocmd("TextYankPost", {
     desc = "Highlight yanked text",
 })
 
+-- Reload files changed outside nvim (e.g. by Claude Code)
+vim.o.autoread = true
+autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
+    group = general,
+    pattern = "*",
+    command = "silent! checktime",
+    desc = "Reload files changed on disk",
+})
+
 -- Remove trailing whitespace on save
 autocmd("BufWritePre", {
     group = general,

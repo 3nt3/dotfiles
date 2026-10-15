@@ -90,7 +90,7 @@ return {
             return {
                 { "<leader>a", function() harpoon:list():add() end,                         desc = "Harpoon: Add file" },
                 { "<C-e>",     function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, desc = "Harpoon: Toggle menu" },
-                { "<C-h>",     function() harpoon:list():select(1) end,                     desc = "Harpoon: File 1" },
+                { "<leader>1", function() harpoon:list():select(1) end,                     desc = "Harpoon: File 1" },
                 { "<C-t>",     function() harpoon:list():select(2) end,                     desc = "Harpoon: File 2" },
                 { "<C-n>",     function() harpoon:list():select(3) end,                     desc = "Harpoon: File 3" },
                 { "<C-s>",     function() harpoon:list():select(4) end,                     desc = "Harpoon: File 4" },
@@ -213,6 +213,19 @@ return {
                     "lazyterm",
                 },
             },
+        },
+    },
+
+    -- Claude Code integration
+    {
+        "coder/claudecode.nvim",
+        dependencies = { "folke/snacks.nvim" },
+        config = true,
+        keys = {
+            { "<leader>cc", "<cmd>ClaudeCode<cr>",           desc = "Claude: Toggle" },
+            { "<leader>cs", "<cmd>ClaudeCodeSend<cr>",       mode = "v", desc = "Claude: Send selection" },
+            { "<leader>cy", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Claude: Accept diff" },
+            { "<leader>cn", "<cmd>ClaudeCodeDiffDeny<cr>",   desc = "Claude: Deny diff" },
         },
     },
 }

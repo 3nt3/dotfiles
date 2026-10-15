@@ -40,8 +40,8 @@ keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>", { desc =
 keymap.set("n", "<leader>f", vim.lsp.buf.format, { desc = "Format buffer" })
 
 -- Quickfix navigation
-keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz", { desc = "Next quickfix item" })
-keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz", { desc = "Previous quickfix item" })
+keymap.set("n", "<leader>n", "<cmd>cnext<CR>zz", { desc = "Next quickfix item" })
+keymap.set("n", "<leader>m", "<cmd>cprev<CR>zz", { desc = "Previous quickfix item" })
 keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz", { desc = "Next location list item" })
 keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz", { desc = "Previous location list item" })
 
@@ -57,9 +57,7 @@ keymap.set("n", "<leader>lc", "<cmd>VimtexCompile<CR>", { desc = "Compile LaTeX"
 -- Toggle wrap
 keymap.set("n", "<leader>w", ":set wrap!<CR>", { desc = "Toggle line wrap" })
 
--- Window navigation (better than default)
-keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
-keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
+-- Window navigation: <C-h/j/k/l> handled by Navigator.nvim (plugins/utils.lua)
 
 -- Resize windows
 keymap.set("n", "<C-Up>", ":resize +2<CR>", opts)
