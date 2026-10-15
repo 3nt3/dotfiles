@@ -42,9 +42,8 @@ opt.scrolloff = 8
 opt.sidescrolloff = 8
 
 -- Performance
-opt.updatetime = 50
+opt.updatetime = 250
 opt.timeoutlen = 300
-opt.lazyredraw = false
 
 -- Splits
 opt.splitbelow = true

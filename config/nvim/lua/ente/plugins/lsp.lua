@@ -68,9 +68,9 @@ return {
             )
 
             -- Server configurations
-            -- vim.lsp.config("ts_ls", { capabilities = capabilities, cmd = { "typescript-language-server", "--stdio" } })
-            -- vim.lsp.config("svelte", { capabilities = capabilities, cmd = { "svelteserver", "--stdio" },  cmd_env = { CHOKIDAR_USEPOLLING = "1" },
-            -- vim.lsp.config("rust_analyzer", { capabilities = capabilities })
+            -- Default capabilities for every server (per-server configs below extend this)
+            vim.lsp.config("*", { capabilities = capabilities })
+            vim.lsp.config("svelte", { cmd_env = { CHOKIDAR_USEPOLLING = "1" } })
             vim.lsp.config("tinymist", {
                 capabilities = capabilities,
                 root_dir = function()
@@ -136,19 +136,6 @@ return {
                 },
                 automatic_enable = true
             })
-
-            -- -- Enable all configured servers
-            -- vim.lsp.enable({
-            --     "ts_ls",
-            --     "rust_analyzer",
-            --     "tinymist",
-            --     "lua_ls",
-            --     "yamlls",
-            --     "jdtls",
-            --     "html",
-            --     "svelte",
-            --     "gopls",
-            -- })
 
             -- LSP keybindings
             vim.api.nvim_create_autocmd("LspAttach", {

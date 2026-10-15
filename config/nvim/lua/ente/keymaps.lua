@@ -3,9 +3,6 @@
 local keymap = vim.keymap
 local opts = { noremap = true, silent = true }
 
--- File Explorer
-keymap.set("n", "<leader>pv", vim.cmd.Ex, { desc = "Open file explorer" })
-
 -- Visual Mode - Move lines
 keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move line down" })
 keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move line up" })
@@ -58,6 +55,8 @@ keymap.set("n", "<leader>lc", "<cmd>VimtexCompile<CR>", { desc = "Compile LaTeX"
 keymap.set("n", "<leader>w", ":set wrap!<CR>", { desc = "Toggle line wrap" })
 
 -- Window navigation: <C-h/j/k/l> handled by Navigator.nvim (plugins/utils.lua)
+-- Leave the Claude Code pane (always on the right) from terminal mode
+keymap.set("t", "<C-h>", "<cmd>NavigatorLeft<cr>", { desc = "Navigate Left" })
 
 -- Resize windows
 keymap.set("n", "<C-Up>", ":resize +2<CR>", opts)

@@ -228,4 +228,43 @@ return {
             { "<leader>cn", "<cmd>ClaudeCodeDiffDeny<cr>",   desc = "Claude: Deny diff" },
         },
     },
+
+    -- File explorer as a buffer
+    {
+        "stevearc/oil.nvim",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        lazy = false, -- replaces netrw for directory buffers
+        keys = {
+            { "-",          "<cmd>Oil<cr>", desc = "Open parent directory" },
+            { "<leader>pv", "<cmd>Oil<cr>", desc = "Open file explorer" },
+        },
+        opts = {
+            default_file_explorer = true,
+            view_options = { show_hidden = true },
+        },
+    },
+
+    -- Git diff / history viewer
+    {
+        "sindrets/diffview.nvim",
+        cmd = { "DiffviewOpen", "DiffviewFileHistory", "DiffviewClose" },
+        keys = {
+            { "<leader>vd", "<cmd>DiffviewOpen<cr>",          desc = "Diffview: open" },
+            { "<leader>vh", "<cmd>DiffviewFileHistory %<cr>", desc = "Diffview: file history" },
+            { "<leader>vq", "<cmd>DiffviewClose<cr>",         desc = "Diffview: close" },
+        },
+    },
+
+    -- Diagnostics / quickfix lists
+    {
+        "folke/trouble.nvim",
+        cmd = "Trouble",
+        opts = {},
+        keys = {
+            { "<leader>tt", "<cmd>Trouble diagnostics toggle<cr>",              desc = "Trouble: workspace diagnostics" },
+            { "<leader>tb", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Trouble: buffer diagnostics" },
+            { "<leader>tr", "<cmd>Trouble lsp_references toggle<cr>",           desc = "Trouble: references" },
+            { "<leader>tq", "<cmd>Trouble qflist toggle<cr>",                   desc = "Trouble: quickfix" },
+        },
+    },
 }
