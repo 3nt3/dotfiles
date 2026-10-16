@@ -67,6 +67,17 @@ return {
                 require("cmp_nvim_lsp").default_capabilities()
             )
 
+            -- Don't attach servers to virtual buffers (diffview://, fugitive://, oil://, ...);
+            -- servers like gopls reject non-file URIs with a JSON-RPC parse error
+            local lsp_start = vim.lsp.start
+            vim.lsp.start = function(config, opts)
+                local bufnr = opts and opts.bufnr or vim.api.nvim_get_current_buf()
+                if vim.api.nvim_buf_get_name(bufnr):match("^%a[%w+.-]*://") then
+                    return
+                end
+                return lsp_start(config, opts)
+            end
+
             -- Server configurations
             -- Default capabilities for every server (per-server configs below extend this)
             vim.lsp.config("*", { capabilities = capabilities })
