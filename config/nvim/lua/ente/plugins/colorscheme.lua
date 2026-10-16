@@ -74,7 +74,13 @@ return {
                 inverse = true,      -- invert background for search, diffs, statuslines and errors
                 contrast = "medium", -- can be "hard", "soft" or empty string
                 palette_overrides = {},
-                overrides = {},
+                overrides = {
+                    -- inverse diffs paint changed lines solid yellow; use muted dark backgrounds instead
+                    DiffAdd    = { bg = "#2a3b2a", reverse = false },
+                    DiffDelete = { bg = "#3b2424", fg = "#5a3a3a", reverse = false },
+                    DiffChange = { bg = "#2b3040", reverse = false },
+                    DiffText   = { bg = "#46506b", bold = true, reverse = false },
+                },
                 dim_inactive = false,
                 transparent_mode = false,
             })
