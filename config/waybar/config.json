@@ -40,9 +40,9 @@
   },
 
   "clock": {
-    // Interval of 1 so the seconds actually tick
+    "format": "{:%H:%M:%S  ·  %A, %e %B}",
     "interval": 1,
-    "format": "{:%H:%M:%S  ·  %a %d %b}",
+    "locale": "de_DE.utf8",
     "tooltip-format": "<tt>{calendar}</tt>",
     "calendar": {
       "mode": "month",

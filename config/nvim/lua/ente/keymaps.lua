@@ -14,12 +14,12 @@ keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Half page up (centered)" })
 keymap.set("n", "n", "nzzzv", { desc = "Next search result (centered)" })
 keymap.set("n", "N", "Nzzzv", { desc = "Previous search result (centered)" })
 
--- Paste without yanking
-keymap.set("x", "<leader>p", [["_dP]], { desc = "Paste without yanking" })
-
 -- System clipboard operations
 keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "Yank to system clipboard" })
 keymap.set("n", "<leader>Y", [["+Y]], { desc = "Yank line to system clipboard" })
+keymap.set("n", "<leader>p", [["+p]], { desc = "Paste from system clipboard" })
+keymap.set("n", "<leader>P", [["+P]], { desc = "Paste from system clipboard before cursor" })
+keymap.set("x", "<leader>p", [["+P]], { desc = "Replace selection with system clipboard" })
 
 -- Delete without yanking
 keymap.set({ "n", "v" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })

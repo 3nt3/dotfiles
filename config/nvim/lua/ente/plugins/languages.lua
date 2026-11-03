@@ -100,15 +100,25 @@ return {
             "nvim-lua/plenary.nvim",
             "stevearc/dressing.nvim",
         },
+        keys = {
+            { "<leader>Fr", "<cmd>FlutterRun<cr>",           ft = "dart", desc = "Flutter run" },
+            { "<leader>Fh", "<cmd>FlutterReload<cr>",        ft = "dart", desc = "Flutter hot reload" },
+            { "<leader>FR", "<cmd>FlutterRestart<cr>",       ft = "dart", desc = "Flutter hot restart" },
+            { "<leader>Fq", "<cmd>FlutterQuit<cr>",          ft = "dart", desc = "Flutter quit" },
+            { "<leader>Fd", "<cmd>FlutterDevices<cr>",       ft = "dart", desc = "Flutter devices" },
+            { "<leader>Fe", "<cmd>FlutterEmulators<cr>",     ft = "dart", desc = "Flutter emulators" },
+            { "<leader>Fo", "<cmd>FlutterOutlineToggle<cr>", ft = "dart", desc = "Flutter outline" },
+            { "<leader>Fl", "<cmd>FlutterLogToggle<cr>",     ft = "dart", desc = "Flutter log" },
+            { "<leader>Ft", "<cmd>FlutterDevTools<cr>",      ft = "dart", desc = "Flutter DevTools" },
+            { "<leader>Fs", "<cmd>FlutterLspRestart<cr>",    ft = "dart", desc = "Flutter LSP restart" },
+        },
         opts = {
             lsp = {
-                color = {
-                    enabled = true,
-                    background = true,
-                    foreground = false,
-                    virtual_text = true,
-                    virtual_text_str = "■",
-                },
+                -- Plugin-managed colors are deprecated; use vim.lsp.document_color (Neovim 0.12+)
+                color = { enabled = false },
+                on_attach = function(client, bufnr)
+                    vim.lsp.document_color.enable(true, bufnr, { style = "virtual" })
+                end,
             },
         },
     },

@@ -55,7 +55,6 @@ opt.shortmess:append("c")
 
 -- Misc
 opt.isfname:append("@-@")
-opt.clipboard = "unnamedplus" -- Use system clipboard
 opt.mouse = "a"
 opt.showmode = false
 

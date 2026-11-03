@@ -244,14 +244,46 @@ return {
         },
     },
 
+    -- File tree sidebar (left; Claude pane lives on the right)
+    {
+        "nvim-neo-tree/neo-tree.nvim",
+        branch = "v3.x",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-tree/nvim-web-devicons",
+            "MunifTanjim/nui.nvim",
+        },
+        cmd = "Neotree",
+        keys = {
+            { "<leader>e", "<cmd>Neotree toggle reveal<cr>",          desc = "Neo-tree: toggle file tree" },
+            { "<leader>E", "<cmd>Neotree toggle source=git_status<cr>", desc = "Neo-tree: git status" },
+        },
+        opts = {
+            close_if_last_window = true,
+            window = {
+                position = "left",
+                width = 32,
+            },
+            filesystem = {
+                hijack_netrw_behavior = "disabled", -- oil handles directory buffers
+                follow_current_file = { enabled = true },
+                use_libuv_file_watcher = true,
+                filtered_items = {
+                    hide_dotfiles = false,
+                    hide_gitignored = false,
+                },
+            },
+        },
+    },
+
     -- Git diff / history viewer
     {
         "sindrets/diffview.nvim",
         cmd = { "DiffviewOpen", "DiffviewFileHistory", "DiffviewClose" },
         keys = {
-            { "<leader>vd", "<cmd>DiffviewOpen<cr>",          desc = "Diffview: open" },
-            { "<leader>vh", "<cmd>DiffviewFileHistory %<cr>", desc = "Diffview: file history" },
-            { "<leader>vq", "<cmd>DiffviewClose<cr>",         desc = "Diffview: close" },
+            { "<leader>gv", "<cmd>DiffviewOpen<cr>",          desc = "Diffview: open" },
+            { "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", desc = "Diffview: file history" },
+            { "<leader>gq", "<cmd>DiffviewClose<cr>",         desc = "Diffview: close" },
         },
     },
 

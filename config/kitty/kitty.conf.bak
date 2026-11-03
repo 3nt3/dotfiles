@@ -12,3 +12,9 @@ confirm_os_window_close 0
 enable_audio_bell no
 cursor_shape block
 enable_kitty_keyboard yes
+
+
+# BEGIN_KITTY_THEME
+# Everforest Dark Hard
+include current-theme.conf
+# END_KITTY_THEME

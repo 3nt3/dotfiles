@@ -1,0 +1,93 @@
+/*
+@sable-theme
+name: Forest Brass
+author: ente
+description: Dark forest green with brass accents, matching the waybar theme
+kind: dark
+contrast: low
+tags: dark, green, brass
+*/
+
+:root, :root.dark, :root:not(.light), html:root.dark, html:root:not(.light) {
+  --font-family-base: "Newsreader", "Vollkorn", "Symbols Nerd Font", serif;
+  --font-family-mono-base: "Iosevka Nerd Font", monospace;
+  --radius: 0;
+  --radius-inner: 0;
+  --radii-200: 0;
+  --radii-300: 0;
+  --radii-400: 0;
+  --radii-500: 0;
+
+  --bg-container: #141c17;
+  --bg-container-hover: #1a241e;
+  --bg-container-active: #243229;
+  --bg-container-line: #3a4d3f;
+  --bg-on-container: #d6cfb4;
+
+  --surface-container: #1a241e;
+  --surface-container-hover: #243229;
+  --surface-container-active: #2c3b30;
+  --surface-container-line: #3a4d3f;
+  --surface-on-container: #d6cfb4;
+
+  --surface-var-container: #101713;
+  --surface-var-container-hover: #141c17;
+  --surface-var-container-active: #1a241e;
+  --surface-var-container-line: #3a4d3f;
+  --surface-var-on-container: #8f9a85;
+
+  --primary-main: #c2a35a;
+  --primary-main-hover: #b0944f;
+  --primary-main-active: #9e8545;
+  --primary-main-line: #8c763c;
+  --primary-on-main: #141c17;
+  --primary-container: #3a3220;
+  --primary-container-hover: #453b26;
+  --primary-container-active: #50452d;
+  --primary-container-line: #5f5236;
+  --primary-on-container: #d8be78;
+
+  --sec-main: #7fa37a;
+  --sec-main-hover: #6f9269;
+  --sec-main-active: #628259;
+  --sec-main-line: #557249;
+  --sec-on-main: #141c17;
+  --sec-container: #243229;
+  --sec-container-hover: #2c3b30;
+  --sec-container-active: #354637;
+  --sec-container-line: #3a4d3f;
+  --sec-on-container: #a9c4a4;
+
+  --success-main: #7fa37a;
+  --success-main-hover: #6f9269;
+  --success-main-active: #628259;
+  --success-main-line: #557249;
+  --success-on-main: #141c17;
+  --success-container: #1f3324;
+  --success-container-hover: #263d2b;
+  --success-container-active: #2d4832;
+  --success-container-line: #3a5a40;
+  --success-on-container: #a9c4a4;
+
+  --warn-main: #c2873a;
+  --warn-main-hover: #b07a33;
+  --warn-main-active: #9e6e2d;
+  --warn-main-line: #8c6128;
+  --warn-on-main: #141c17;
+  --warn-container: #3a2a16;
+  --warn-container-hover: #45321b;
+  --warn-container-active: #503a20;
+  --warn-container-line: #5f4626;
+  --warn-on-container: #e0b070;
+
+  --crit-main: #a8504a;
+  --crit-main-hover: #96463f;
+  --crit-main-active: #843d38;
+  --crit-main-line: #72342f;
+  --crit-on-main: #f0e6d0;
+  --crit-container: #3b1f1d;
+  --crit-container-hover: #472523;
+  --crit-container-active: #532c29;
+  --crit-container-line: #643531;
+  --crit-on-container: #e0928c;
+}

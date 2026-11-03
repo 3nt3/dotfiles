@@ -1,0 +1,39 @@
+/*
+@sable-tweak
+name: Dense
+author: ente
+description: Tighter spacing, smaller controls and text, flat corners
+*/
+
+:root {
+  --space-050: .0625rem;
+  --space-100: .125rem;
+  --space-150: .1875rem;
+  --space-200: .25rem;
+  --space-250: .3125rem;
+  --space-300: .375rem;
+  --space-400: .5rem;
+  --space-500: .625rem;
+  --space-600: .75rem;
+  --space-700: 1rem;
+
+  --control-height-300: 1.5rem;
+  --control-height-400: 1.75rem;
+  --control-height-500: 2.125rem;
+  --control-height-touch: 2rem;
+
+  --font-size-body: calc(.875rem * var(--text-scale));
+  --font-size-label: calc(.8125rem * var(--text-scale));
+  --font-size-small: calc(.6875rem * var(--text-scale));
+  --font-size-x-small: calc(.6875rem * var(--text-scale));
+  --font-size-subheading: calc(.9375rem * var(--text-scale));
+  --font-size-heading: calc(1rem * var(--text-scale));
+  --line-height-body: 1.3;
+  --line-height-small: calc(1rem * var(--text-scale));
+
+  --header-height: 2.25rem;
+  --navigation-rail-width: 3rem;
+  --avatar-size-small: 1.25rem;
+  --avatar-size-medium: 1.75rem;
+  --icon-size-medium: 1rem;
+}
