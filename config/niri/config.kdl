@@ -108,6 +108,17 @@ input {
     position x=1280 y=0
 }
 
+// Desktop (atombunkerr): two Samsung U28E590 4K monitors
+output "Samsung Electric Company U28E590 H4LN803729" {
+    scale 1.75
+    position x=0 y=0
+}
+
+output "Samsung Electric Company U28E590 HNMR204383" {
+    scale 1.75
+    position x=2195 y=0
+}
+
 // Settings that influence how windows are positioned and sized.
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Layout
