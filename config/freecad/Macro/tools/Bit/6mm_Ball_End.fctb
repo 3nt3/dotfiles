@@ -1,0 +1,15 @@
+{
+  "attribute": {},
+  "name": "6mm Ball End",
+  "parameter": {
+    "Chipload": "0,0 mm",
+    "CuttingEdgeHeight": "40,0 mm",
+    "Diameter": "6,0 mm",
+    "Flutes": "0",
+    "Length": "50,0 mm",
+    "Material": "HSS",
+    "ShankDiameter": "3,0 mm"
+  },
+  "shape": "ballend.fcstd",
+  "version": 1
+}

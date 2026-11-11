@@ -1,0 +1,4 @@
+# third-party add-ons (Addon Manager installs, partly their own git repos): not versioned here
+/*
+!/.gitignore
+!/NCPrograms/

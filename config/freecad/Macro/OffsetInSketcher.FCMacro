@@ -1,0 +1,200 @@
+#
+#  offset command in sketcher
+#
+from PySide import QtGui
+import re, math
+
+class OffsetDialog(QtGui.QDialog):
+
+	def __init__(self):
+		super(OffsetDialog, self).__init__()
+		buttonBox = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Cancel)
+		buttonBox.rejected.connect(self.reject) # reject button pressed
+		buttonBox.accepted.connect(self.calculate) # OK button pressed
+		self.createEditGroupBox() # create an editBox
+		mainLayout = QtGui.QVBoxLayout()
+		mainLayout.addWidget(buttonBox)
+		mainLayout.addWidget(self.editGroupBox)
+		self.setLayout(mainLayout)
+		self.setWindowTitle("Create sections")
+		self.show()
+      
+	def createEditGroupBox(self):
+		self.editGroupBox = QtGui.QGroupBox("Select offset value")
+		layout = QtGui.QFormLayout()
+		self.editBox=QtGui.QLineEdit("10")
+		layout.addRow(QtGui.QLabel("Offset value:"),self.editBox)
+		self.editGroupBox.setLayout(layout)
+		pass
+
+	def calculate(self):
+
+		def linesAndArcs():
+		#
+		# returns a list of all selected lines and arcs
+		#
+			SelEx=Gui.Selection.getSelectionEx()[0].SubElementNames # list of selected elements
+			AllGeo = ActiveSketch.Geometry # full geometry list
+			Sel = []
+			for El in SelEx:
+				if El.find('Edge') == 0: # El is an edge
+					Sel.append(AllGeo[int(re.findall(r'\d+',El)[0])-1])
+			return Sel
+
+		def areEqual(V1,V2):
+		#
+		# check the  identity of two vectors
+		#
+			if (V1-V2).Length < 0.001: return True
+
+		def interlinkedLines(UnsortedEdges):
+		#
+		# return an interlinked list of lines and arcs
+		#
+			def getBackwardElem(Element,UnsortedEdges):
+			#
+			# get next edge in backward direction
+			#
+				if len(UnsortedEdges) == 0: return
+				else:
+					StartPt = Element.StartPoint
+					Num = 0
+					while Num <= len(UnsortedEdges)-1: # search backward
+						El=UnsortedEdges[Num]
+						if (areEqual(El.StartPoint,StartPt)) or (areEqual(El.EndPoint ,StartPt)): # element found
+							if areEqual(El.StartPoint,StartPt): # swap element
+								El.reverse() 
+							SortedEdges.append(El)
+							UnsortedEdges.pop(Num)
+							getBackwardElem(El,UnsortedEdges)
+							break
+						Num = Num+1
+					return # nothing found
+
+			def getForwardElem(Element,UnsortedEdges):
+			#
+			# get next edge in forward direction
+			#
+				if len(UnsortedEdges) == 0: return
+				else:
+					EndPt = Element.EndPoint # endpoint of first element in geolist
+					Num = 0
+					while Num <= len(UnsortedEdges)-1: # search forward
+						El=UnsortedEdges[Num]
+						if (areEqual(El.StartPoint,EndPt)) or (areEqual(El.EndPoint ,EndPt)): # element found
+							if areEqual(El.EndPoint,EndPt): # swap element
+								El.reverse()
+							SortedEdges.append(El)
+							UnsortedEdges.pop(Num)
+							getForwardElem(El,UnsortedEdges)
+							break
+						Num = Num+1
+					return # nothing found
+
+			msgBoxSplit = QtGui.QMessageBox()
+			msgBoxSplit.setText('Selected lines are split')
+			SortedEdges = []
+			SortedEdges.append(UnsortedEdges.pop(0)) # first element in UnsortedEdges list
+			getBackwardElem(SortedEdges[0],UnsortedEdges)
+			SortedEdges.reverse()
+			getForwardElem(SortedEdges[-1],UnsortedEdges)
+			if len(UnsortedEdges) > 0 :
+				msgBoxSplit.exec_() # selected lines are split
+			return SortedEdges
+
+		def pointBetween(Edge0,Edge1):
+		#
+		# calculate  vertex between two offset edges 
+		#
+
+			def flection(A,B,C):
+			#
+			# returns True if flection of polyline is negative
+			#
+				M = App.Matrix(	A.x,	A.y,	1,	0,
+								B.x,	B.y,	1,	0,
+								C.x,	C.y,	1,	0,
+								0,	0,	0,	1)
+				if M.determinant() < 0.0: return True
+
+			if hasattr(Edge0,'Radius'): # first edge is an arc
+				delta = Edge0.EndPoint.sub(Edge0.Center).normalize()
+				if Edge0.Axis.z < 0.0: delta = delta.negative()
+			elif hasattr(Edge1,'Radius'): # second edge is an arc
+				delta = Edge1.StartPoint.sub(Edge1.Center).normalize()
+				if Edge1.Axis.z < 0.0: delta = delta.negative()
+			else: # none edge is an arc
+				e0=(Edge0.EndPoint.sub(Edge0.StartPoint)).normalize()
+				e1=(Edge1.EndPoint.sub(Edge1.StartPoint)).normalize()
+				Angle = e0.getAngle(e1) # angle between edges
+				if Angle == 0.0: # edges fall in line
+					delta =e0.cross(App.Vector(0,0,1))
+				else:
+					Factor = 1.0/math.cos(Angle/2) # ... distance in the moment allways one
+					delta=e0.sub(e1).normalize().multiply(Factor) # from point to offset point
+				if flection(Edge0.StartPoint,Edge0.EndPoint,Edge1.EndPoint):
+					delta=delta.negative() # ... if flection is negative
+			delta = delta.multiply(OffsetValue)
+			pt=Edge0.EndPoint.add(delta)
+			return pt
+
+		def pointAtOpenEnd(Edge,Start):
+		#
+		# calculate  offset vertex at start or end of open edge
+		#
+			e = (Edge.EndPoint.sub(Edge.StartPoint)).normalize()
+			Factor = OffsetValue
+			delta =e.cross(App.Vector(0,0,1)).multiply(Factor)  # from point to offset point
+			if Start:	pt = Edge.StartPoint+delta
+			else:	pt = Edge.EndPoint+delta
+			return pt
+
+		def createOffsetVertexes(SortedEdges):
+		#
+		# create vertexes of offset line
+		#
+
+			OffsetPoints = []
+			NumOfEdges = len(SortedEdges)-1
+			if areEqual(SortedEdges[0].StartPoint,SortedEdges[-1].EndPoint): # figure is closed
+				SortedEdges.append(SortedEdges[0]) # copy first edge to end
+				for i in range(NumOfEdges+1):
+					OffsetPoints.append(pointBetween(SortedEdges[i],SortedEdges[i+1]))
+				OffsetPoints.insert(0,OffsetPoints[-1]) # append last vertex at start
+			else: # figure is open
+				OffsetPoints.append(pointAtOpenEnd(SortedEdges[0],True))
+				for i in range(NumOfEdges):
+					OffsetPoints.append(pointBetween(SortedEdges[i],SortedEdges[i+1]))
+				OffsetPoints.append(pointAtOpenEnd(SortedEdges[-1],False))
+			return OffsetPoints
+
+		def drawOffsetLines(SortedEdges,OffsetPoints):
+		#
+		# draw the offset lines
+		#
+			msgBoxNegRadius = QtGui.QMessageBox()
+			msgBoxNegRadius.setText('Inner radius becomes negativ')
+			OffsetLines = []
+			for i in range(len(OffsetPoints)-1):
+				if hasattr(SortedEdges[i],'Radius'): # edge is an arc
+					Arc = SortedEdges[i]
+					Offset = OffsetValue
+					if Arc.Axis.z < 0.0:
+						Arc.reverse()
+						Offset = -OffsetValue
+					if Arc.Radius+Offset < 0.0:
+						msgBoxNegRadius.exec_()
+					else:
+						OffsetLines.append(Part.ArcOfCircle(Part.Circle(Arc.Center,Arc.Axis,Arc.Radius+Offset),Arc.FirstParameter,Arc.LastParameter))
+				else: # edge is a line
+					OffsetLines.append(Part.LineSegment(OffsetPoints[i],OffsetPoints[i+1]))
+			ActiveSketch.addGeometry(OffsetLines,False)
+
+		OffsetValue = float(self.editBox.text())
+		SortedEdges = interlinkedLines(linesAndArcs()) # list of interlinked lines and arcs S0-E0,S1-E1, ...
+		OffsetPoints = createOffsetVertexes(SortedEdges) # create offset vertexes
+		drawOffsetLines(SortedEdges,OffsetPoints) # draw the lines
+		App.ActiveDocument.recompute()
+		self.accept() # close QDialog as if OK button pressed
+
+execute =OffsetDialog()

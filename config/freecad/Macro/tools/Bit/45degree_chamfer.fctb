@@ -1,0 +1,16 @@
+{
+  "attribute": {},
+  "name": "45 Deg. Chamfer",
+  "parameter": {
+    "Chipload": "0,0 mm",
+    "CuttingEdgeHeight": "6,35 mm",
+    "Diameter": "12,3323 mm",
+    "Flutes": "2",
+    "Length": "30,0 mm",
+    "Material": "HSS",
+    "Radius": "4,0 mm",
+    "ShankDiameter": "6,35 mm"
+  },
+  "shape": "chamfer.fcstd",
+  "version": 1
+}

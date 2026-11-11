@@ -1,0 +1,306 @@
+# -*- coding: utf-8 -*-
+# NC_Post_Process.FCMacro  -  like Fusion's "Post Process" on NC programs.
+#
+# Select NC programs in the tree (group "NC Programs") and run this to post them;
+# with nothing selected, all NC programs are posted.
+# Create and edit programs with NC_Program.FCMacro (Fusion's "NC Program" dialog).
+#
+# You can rename a program in the tree (F2): "O1003 HALTERUNG TOP REST" -> number 1003,
+# name "HALTERUNG TOP REST".
+# Comments are reduced to the characters Fusion's Fanuc posts allow (A-Z 0-9 space . , = _ -).
+# Nothing in the document is changed: operations that are not in a program are switched
+# off only while it is posted.
+
+import json
+import os
+import re
+import subprocess
+
+import FreeCAD
+import Path.Dressup.Utils as PDU
+from Path.Post.Processor import PostProcessorFactory
+
+CONTROL_MEMORY = 48 * 1024
+EDITOR = os.path.expanduser("~/.local/bin/dnc_gui")
+ALLOWED = set("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,=_-")
+TRANSLIT = {
+    "Ä": "AE", "Ö": "OE", "Ü": "UE", "ä": "AE", "ö": "OE", "ü": "UE", "ß": "SS",
+    "°": "DEG", "µ": "U", "Ø": "DIA", "ø": "DIA", "±": "PM", "×": "X", "–": "-", "—": "-",
+}
+PROPS = [  # (type, name, tooltip)  - the properties of an NC program object
+    ("App::PropertyInteger", "ProgramNumber", "Name/number: the O number"),
+    ("App::PropertyString", "ProgramName", "Comment: the name after the O number"),
+    ("App::PropertyEnumeration", "Kind", "load = store in the control (48 KB), drip = feed through DNC"),
+    ("App::PropertyLink", "Job", "The setup (job) of this program"),
+    ("App::PropertyLinkList", "Operations", "The operations of this program"),
+    ("App::PropertyBool", "AllOtherOperations", "Also every operation of the setup that no other program has"),
+    ("App::PropertyString", "FileName", "File name without extension; empty = <number>_<comment>"),
+    ("App::PropertyString", "OutputFolder", "Folder; empty = 'nc' next to the FreeCAD file"),
+    ("App::PropertyString", "Extension", "NC extension"),
+    ("App::PropertyBool", "OpenInEditor", "Open the NC file in dnc_gui after posting"),
+]
+
+
+# ---------------------------------------------------------------- comments
+
+def clean_comment(text):
+    s = "".join(TRANSLIT.get(ch, ch) for ch in text).upper()
+    s = "".join(c if c in ALLOWED else " " for c in s)
+    return re.sub(r" {2,}", " ", s).strip()
+
+
+_MOTION = re.compile(r"^G0?([0-3])$")
+_KEEP_MODAL = {"17", "18", "19", "20", "21", "40", "41", "42", "43", "49", "54", "55", "56", "57", "58", "59",
+               "90", "91", "94", "95"}  # G codes that do not touch the motion mode
+
+
+def modal_cleanup(lines):
+    """Drop G0/G1/G2/G3 words that repeat the current motion mode and F words that repeat the
+    current feed (Fanuc keeps both modal), and every F0. Canned cycles, G80, G28, G4 and tool
+    changes reset the tracking, so the next motion word and feed are written again."""
+    out, mode, feed = [], None, None
+    for line in lines:
+        s = line.strip()
+        if not s or s.startswith(("(", "%", "O")):
+            out.append(line)
+            continue
+        code, comment = (s.split("(", 1) + [""])[:2]
+        words = code.split()
+        kept = []
+        reset = False
+        for w in words:
+            u = w.upper()
+            if u.startswith("G"):
+                m = _MOTION.match(u)
+                if m:
+                    if mode == m.group(1):
+                        continue          # same motion mode: redundant
+                    mode = m.group(1)
+                elif u[1:].split(".")[0] not in _KEEP_MODAL:
+                    reset = True          # cycles, G80, G28, G4, G98 ...
+            elif u.startswith("F"):
+                try:
+                    val = float(u[1:])
+                except ValueError:
+                    kept.append(w)
+                    continue
+                if val == 0.0:
+                    continue              # F0 on rapids: never useful
+                if feed is not None and abs(val - feed) < 1e-9:
+                    continue              # same feed: redundant
+                feed = val
+            elif u.startswith("M") and u[1:].lstrip("0") in ("6", "30", "2"):
+                reset = True
+            kept.append(w)
+        if reset:
+            mode, feed = None, None
+        new = " ".join(kept)
+        if comment:
+            new = (new + " (" + comment).strip()
+        if new:
+            out.append(new)
+    return out
+
+
+def clean_gcode(gcode):
+    lines = []
+    for line in gcode.split("\n"):
+        if "(" in line or ")" in line:
+            def repl(m):
+                inner = clean_comment(m.group(1))
+                return "(" + inner + ")" if inner else ""
+            line = re.sub(r"\(([^()]*)\)", repl, line)
+            if line.count("(") != line.count(")"):
+                line = line.replace("(", " ").replace(")", " ")
+        lines.append(line.rstrip())
+    return "\n".join(modal_cleanup(lines))
+
+
+# ---------------------------------------------------------------- programs
+
+def say(msg):
+    FreeCAD.Console.PrintMessage(msg + "\n")
+
+
+def warn(msg):
+    FreeCAD.Console.PrintWarning(msg + "\n")
+
+
+def base_of(op):
+    try:
+        return PDU.baseOp(op)
+    except Exception:
+        return op
+
+
+def ensure_props(obj):
+    """Give an NC program object every property (older ones lack the newer ones)."""
+    for typ, name, tip in PROPS:
+        if not hasattr(obj, name):
+            obj.addProperty(typ, name, "NC Program", tip)
+            if name == "Kind":
+                obj.Kind = ["load", "drip"]
+            if name == "Extension":
+                obj.Extension = ".nc"
+
+
+def sync_from_label(p):
+    """Renamed in the tree ('O1005 HALTERUNG X')? Take number and name from the label."""
+    m = re.match(r"^\s*O?(\d{1,4})\s+(.+?)\s*$", p.Label)
+    if m and (int(m.group(1)), m.group(2).upper()) != (p.ProgramNumber, p.ProgramName):
+        p.ProgramNumber, p.ProgramName = int(m.group(1)), m.group(2).upper()
+    want = "O%d %s" % (p.ProgramNumber, p.ProgramName)
+    if p.Label != want:
+        p.Label = want
+
+
+def nc_programs(doc):
+    return sorted(
+        (o for o in doc.Objects if hasattr(o, "ProgramNumber") and hasattr(o, "Operations")),
+        key=lambda o: o.ProgramNumber,
+    )
+
+
+def jobs_of(doc):
+    return [o for o in doc.Objects if hasattr(o, "Operations") and hasattr(o, "Fixtures")]
+
+
+def rest_ops(doc, job):
+    claimed = {o.Name for p in nc_programs(doc) if p.Job == job and not p.AllOtherOperations for o in p.Operations}
+    return [o.Name for o in job.Operations.Group if o.Name not in claimed]
+
+
+def program_ops(doc, p):
+    """Operation names of a program, in the setup's order."""
+    mine = {o.Name for o in p.Operations}
+    extra = set(rest_ops(doc, p.Job)) if p.AllOtherOperations else set()
+    return [o.Name for o in p.Job.Operations.Group if o.Name in mine or o.Name in extra]
+
+
+def default_folder(doc):
+    return os.path.join(os.path.dirname(doc.FileName), "nc")
+
+
+def output_folder(doc, p):
+    return os.path.expanduser(getattr(p, "OutputFolder", "") or "") or default_folder(doc)
+
+
+def default_file_name(p):
+    slug = re.sub(r"[^a-z0-9]+", "_", p.ProgramName.lower().replace("halterung ", "")).strip("_")
+    return "%d_%s" % (p.ProgramNumber, slug)
+
+
+def output_path(doc, p):
+    ext = getattr(p, "Extension", "") or ".nc"
+    if not ext.startswith("."):
+        ext = "." + ext
+    name = (getattr(p, "FileName", "") or "").strip() or default_file_name(p)
+    return os.path.join(output_folder(doc, p), name + ext)
+
+
+# ---------------------------------------------------------------- posting
+
+MISSING = {}  # program number -> operations that did not make it into the file (last run)
+
+
+def post_programs(doc, todo=None, open_editor=True):
+    """Post the programs in todo (default all). Returns [(number, kind, path, bytes, [op labels])]."""
+    MISSING.clear()
+    programs = nc_programs(doc)
+    for p in programs:
+        ensure_props(p)
+        sync_from_label(p)
+    todo = [p for p in programs if p in todo] if todo else programs
+    report = []
+    for job in jobs_of(doc):
+        mine = [p for p in todo if p.Job == job]
+        if not mine:
+            continue
+        ops = list(job.Operations.Group)
+        was_active = {o.Name: base_of(o).Active for o in ops}
+        old_label, old_overrides = job.Label, job.PostProcessorPropertyOverrides
+        try:
+            for p in mine:
+                keep = program_ops(doc, p)
+                for o in ops:
+                    base_of(o).Active = (o.Name in keep) and was_active[o.Name]
+                job.Label = p.ProgramName
+                job.PostProcessorPropertyOverrides = json.dumps(
+                    {"program_number": int(p.ProgramNumber), "show_dialog": False}
+                )
+                gcode = clean_gcode(PostProcessorFactory.get_post_processor(job, "fanuc").export2()[0][1])
+                # every operation must really be in the file (an op without a computed path drops out silently)
+                def _in_file(n):
+                    o = doc.getObject(n)
+                    names = {o.Label, o.Name, base_of(o).Label, base_of(o).Name}  # a dressup posts under its base op
+                    return any("(" + clean_comment(x) + ")" in gcode for x in names)
+                missing = [doc.getObject(n).Label for n in keep if not _in_file(n)]
+                if missing:
+                    warn("O%d: NOT IN THE FILE (no toolpath? recompute them): %s" % (p.ProgramNumber, ", ".join(missing)))
+                    MISSING[p.ProgramNumber] = missing
+                path = output_path(doc, p)
+                os.makedirs(os.path.dirname(path), exist_ok=True)
+                with open(path, "w", encoding="ascii", errors="strict") as f:
+                    f.write(gcode)
+                report.append((p.ProgramNumber, str(p.Kind), path, len(gcode.encode("ascii")),
+                               [doc.getObject(n).Label for n in keep]))
+                if open_editor and getattr(p, "OpenInEditor", False) and os.path.exists(EDITOR):
+                    subprocess.Popen([EDITOR, path], start_new_session=True,
+                                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        finally:
+            for o in ops:
+                base_of(o).Active = was_active[o.Name]
+            job.Label, job.PostProcessorPropertyOverrides = old_label, old_overrides
+    return sorted(report)
+
+
+def warnings_for(doc):
+    out = []
+    for job in jobs_of(doc):
+        plist = [p for p in nc_programs(doc) if p.Job == job]
+        if not plist:
+            continue
+        inprog = {n for p in plist for n in program_ops(doc, p)}
+        left = [o.Label for o in job.Operations.Group if o.Name not in inprog]
+        if left:
+            out.append("%s: operations in no NC program: %s" % (job.Label, ", ".join(left)))
+    return out
+
+
+def summary_text(report):
+    lines = ["O%d  %-5s %-34s %7.1f kB" % (n, k, os.path.basename(path), size / 1024)
+             for n, k, path, size, _ in report]
+    loaded = sum(r[3] for r in report if r[1] == "load")
+    if any(r[1] == "load" for r in report):
+        lines += ["", "Load normally: %.1f kB of %d kB control memory%s"
+                  % (loaded / 1024, CONTROL_MEMORY // 1024, "" if loaded <= CONTROL_MEMORY else "   <-- TOO BIG")]
+    for number, missing in sorted(MISSING.items()):
+        lines += ["", "!!! O%d IS INCOMPLETE - missing: %s (recompute them and post again)" % (number, ", ".join(missing))]
+    return "\n".join(lines)
+
+
+def main():
+    doc = FreeCAD.ActiveDocument
+    programs = nc_programs(doc)
+    if not programs:
+        warn("No NC programs yet. Select operations and run Macro > NC_Program.")
+        return []
+    import FreeCADGui
+    selected = [o for o in FreeCADGui.Selection.getSelection() if o in programs]
+    for w in warnings_for(doc):
+        warn(w)
+    report = post_programs(doc, selected or programs)
+    text = summary_text(report)
+    say(text)
+    from PySide import QtGui as _q
+    try:
+        from PySide import QtWidgets as _q
+    except ImportError:
+        pass
+    folders = sorted({os.path.dirname(r[2]) for r in report})
+    _q.QMessageBox.information(None, "Post Process", text + "\n\nFolder: " + ", ".join(folders))
+    return report
+
+
+if __name__ == "__main__":
+    main()

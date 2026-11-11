@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=DNC GUI
+GenericName=G-Code Transfer Tool
+Comment=Nias ultrageiles G-Code-Übertragungstool
+Exec=/home/ente/.local/bin/dnc_gui %f
+Icon=utilities-terminal
+Terminal=false
+Categories=Development;Engineering;
+Keywords=gcode;cnc;dnc;serial;
+StartupWMClass=dnc_gui

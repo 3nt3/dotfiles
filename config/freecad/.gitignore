@@ -1,0 +1,4 @@
+__pycache__/
+*.bak-*
+# Addon Manager macro with its own repo
+/Macro/FreeCAD-CommandPalette/

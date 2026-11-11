@@ -69,3 +69,22 @@
     ~/.config/mako:
       create: true
       path: config/mako
+    # FreeCAD (dev build, user data dir v27-1): macros, add-ons, CAM assets (machines, tools)
+    ~/.local/share/FreeCAD/v27-1/Macro:
+      create: true
+      path: config/freecad/Macro
+    ~/.local/share/FreeCAD/v27-1/Mod:
+      create: true
+      path: config/freecad/Mod
+    ~/.local/share/FreeCAD/v27-1/CamAssets:
+      create: true
+      path: config/freecad/CamAssets
+    # dnc_gui (binary: build ~/src/3nt3/dnc_gui and copy build/dnc_gui to ~/.local/bin)
+    ~/.local/share/applications/dnc_gui.desktop:
+      create: true
+      path: config/applications/dnc_gui.desktop
+
+- shell:
+    # dnc_gui rewrites its settings file, so it is copied once instead of linked
+    - command: "[ -e ~/.config/3nt3/DncGui.conf ] || install -Dm644 config/dnc_gui/DncGui.conf ~/.config/3nt3/DncGui.conf"
+      description: dnc_gui default settings

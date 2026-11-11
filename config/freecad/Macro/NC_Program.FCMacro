@@ -1,0 +1,311 @@
+# -*- coding: utf-8 -*-
+# NC_Program.FCMacro  -  like Fusion's "NC Program" command.
+#
+#   new:  select operations (or a whole job) in the tree, run this  -> they are pre-ticked
+#   edit: select an NC program in the tree ("NC Programs" group), run this
+#
+# Dialog: "Settings" tab (name/number, comment, file name, output folder, extension,
+# load/drip, open NC file in editor) and "Operations" tab (setups and their operations
+# with tick boxes). Buttons: Post, OK, Cancel - as in Fusion.
+# Post Process of several programs: NC_Post_Process.FCMacro.
+
+import os
+
+import FreeCAD
+import FreeCADGui
+from PySide import QtCore, QtGui
+
+try:
+    from PySide import QtWidgets
+except ImportError:
+    QtWidgets = QtGui
+
+_LIB = os.path.join(FreeCAD.getUserMacroDir(True), "NC_Post_Process.FCMacro")
+nc = {"__name__": "nc_post_lib"}
+exec(compile(open(_LIB, encoding="utf-8").read(), _LIB, "exec"), nc)
+
+ROLE = QtCore.Qt.ItemDataRole.UserRole if hasattr(QtCore.Qt, "ItemDataRole") else QtCore.Qt.UserRole
+_CS = QtCore.Qt.CheckState if hasattr(QtCore.Qt, "CheckState") else QtCore.Qt
+CHECKED, UNCHECKED = _CS.Checked, _CS.Unchecked
+_IF = QtCore.Qt.ItemFlag if hasattr(QtCore.Qt, "ItemFlag") else QtCore.Qt
+CHECKABLE, ENABLED = _IF.ItemIsUserCheckable, _IF.ItemIsEnabled
+AUTOTRI = getattr(_IF, "ItemIsAutoTristate", getattr(_IF, "ItemIsTristate", 0))
+GRAY = QtGui.QColor("#928374")
+
+
+def _tool(op):
+    tc = getattr(nc["base_of"](op), "ToolController", None) or getattr(op, "ToolController", None)
+    return "T%d  %s" % (tc.ToolNumber, tc.Label.replace("TC: ", "")) if tc else ""
+
+
+def _job_of(doc, op):
+    for job in nc["jobs_of"](doc):
+        if op in job.Operations.Group:
+            return job
+    return None
+
+
+def _next_number(doc, job):
+    progs = nc["nc_programs"](doc)
+    mine = [p.ProgramNumber for p in progs if p.Job == job]
+    if mine:
+        return max(mine) + 1
+    every = [p.ProgramNumber for p in progs]
+    return (max(every) // 10 + 1) * 10 + 1 if every else 1001
+
+
+class NCProgramDialog(QtWidgets.QDialog):
+    def __init__(self, doc, program=None, preticked=(), job_hint=None, parent=None):
+        super().__init__(parent)
+        self.doc, self.program = doc, program
+        if program is not None:
+            nc["ensure_props"](program)
+        job = program.Job if program is not None else job_hint
+        self.setWindowTitle("NC Program" + (" - " + program.Label if program is not None else ""))
+        self.resize(720, 640)
+
+        tabs = QtWidgets.QTabWidget()
+        tabs.addTab(self._settings_tab(job), "Settings")
+        tabs.addTab(self._operations_tab(preticked), "Operations")
+
+        buttons = QtWidgets.QDialogButtonBox()
+        self.b_post = buttons.addButton("Post", QtWidgets.QDialogButtonBox.AcceptRole)
+        buttons.addButton(QtWidgets.QDialogButtonBox.Ok)
+        buttons.addButton(QtWidgets.QDialogButtonBox.Cancel)
+        self.b_post.setDefault(True)
+        buttons.clicked.connect(self._clicked)
+        self._buttons = buttons
+
+        lay = QtWidgets.QVBoxLayout(self)
+        lay.addWidget(tabs)
+        lay.addWidget(buttons)
+
+    # ---------------- Settings
+    def _settings_tab(self, job):
+        p = self.program
+        w = QtWidgets.QWidget()
+        lay = QtWidgets.QVBoxLayout(w)
+
+        mp = QtWidgets.QGroupBox("Machine and post")
+        f1 = QtWidgets.QFormLayout(mp)
+        machine = getattr(job, "Machine", "") if job else ""
+        f1.addRow("Machine:", QtWidgets.QLabel(machine or "(from the setup)"))
+        f1.addRow("Post:", QtWidgets.QLabel("fanuc  (header, preamble and postamble from the machine)"))
+
+        pg = QtWidgets.QGroupBox("Program")
+        f2 = QtWidgets.QFormLayout(pg)
+        self.number = QtWidgets.QSpinBox()
+        self.number.setRange(1, 9999)
+        self.number.setValue(p.ProgramNumber if p else _next_number(self.doc, job))
+        self.comment = QtWidgets.QLineEdit(p.ProgramName if p else
+                                           ("HALTERUNG " + job.Label.replace("HALTERUNG ", "")) if job else "")
+        self.comment.setPlaceholderText("e.g. HALTERUNG TOP ROUGHING")
+        self.filename = QtWidgets.QLineEdit(getattr(p, "FileName", "") if p else "")
+        self.folder = QtWidgets.QLineEdit(getattr(p, "OutputFolder", "") if p else "")
+        self.folder.setPlaceholderText(nc["default_folder"](self.doc))
+        b_browse = QtWidgets.QToolButton()
+        b_browse.setText("...")
+        b_browse.setToolTip("Select output folder")
+        b_open = QtWidgets.QToolButton()
+        b_open.setText("Open")
+        b_open.setToolTip("Open output folder")
+        b_browse.clicked.connect(self._browse)
+        b_open.clicked.connect(self._open_folder)
+        frow = QtWidgets.QHBoxLayout()
+        frow.addWidget(self.folder, 1)
+        frow.addWidget(b_browse)
+        frow.addWidget(b_open)
+        self.ext = QtWidgets.QLineEdit((getattr(p, "Extension", "") or ".nc") if p else ".nc")
+        self.ext.setMaximumWidth(80)
+        self.kind = QtWidgets.QComboBox()
+        self.kind.addItem("Store in control (load, max 48 KB)", "load")
+        self.kind.addItem("Drip feed through DNC (any size)", "drip")
+        self.kind.setCurrentIndex(1 if (p and str(p.Kind) == "drip") else 0)
+        self.open_editor = QtWidgets.QCheckBox("Open NC file in editor (dnc_gui)")
+        self.open_editor.setChecked(bool(getattr(p, "OpenInEditor", False)) if p else False)
+
+        f2.addRow("Name/number:", self.number)
+        f2.addRow("Comment:", self.comment)
+        f2.addRow("File name:", self.filename)
+        f2.addRow("Output folder:", frow)
+        f2.addRow("NC extension:", self.ext)
+        f2.addRow("Unit:", QtWidgets.QLabel("Millimeters"))
+        f2.addRow("Transfer:", self.kind)
+        f2.addRow("", self.open_editor)
+
+        self.number.valueChanged.connect(self._update_placeholder)
+        self.comment.textChanged.connect(self._update_placeholder)
+        self._update_placeholder()
+
+        lay.addWidget(mp)
+        lay.addWidget(pg)
+        lay.addStretch(1)
+        return w
+
+    def _update_placeholder(self, *_):
+        class _P:  # what the default file name would be
+            ProgramNumber = self.number.value()
+            ProgramName = self.comment.text().strip().upper() or "PROGRAM"
+        self.filename.setPlaceholderText(nc["default_file_name"](_P))
+
+    def _browse(self):
+        start = self.folder.text().strip() or nc["default_folder"](self.doc)
+        d = QtWidgets.QFileDialog.getExistingDirectory(self, "Select output folder", start)
+        if d:
+            self.folder.setText(d)
+
+    def _open_folder(self):
+        d = os.path.expanduser(self.folder.text().strip()) or nc["default_folder"](self.doc)
+        os.makedirs(d, exist_ok=True)
+        QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(d))
+
+    # ---------------- Operations
+    def _operations_tab(self, preticked):
+        doc, p = self.doc, self.program
+        w = QtWidgets.QWidget()
+        lay = QtWidgets.QVBoxLayout(w)
+        self.tree = QtWidgets.QTreeWidget()
+        self.tree.setHeaderLabels(["Operation", "Tool", "Now in"])
+        self.tree.setAlternatingRowColors(True)
+
+        owner = {}
+        for q in nc["nc_programs"](doc):
+            for n in nc["program_ops"](doc, q):
+                owner.setdefault(n, q)
+        mine = set(nc["program_ops"](doc, p)) if p is not None else {o.Name for o in preticked}
+        only_job = p.Job if p is not None else None
+
+        for job in nc["jobs_of"](doc):
+            if only_job is not None and job != only_job:
+                continue
+            top = QtWidgets.QTreeWidgetItem(self.tree, [job.Label, "", ""])
+            top.setFlags(top.flags() | CHECKABLE | AUTOTRI)
+            top.setData(0, ROLE, job.Name)
+            for op in job.Operations.Group:
+                q = owner.get(op.Name)
+                now = "" if (q is None or q == p) else q.Label
+                it = QtWidgets.QTreeWidgetItem(top, [op.Label, _tool(op), now])
+                it.setFlags(it.flags() | CHECKABLE)
+                it.setCheckState(0, CHECKED if op.Name in mine else UNCHECKED)
+                it.setData(0, ROLE, op.Name)
+                if now:
+                    it.setForeground(2, GRAY)
+                    it.setToolTip(2, "Ticking it moves it from %s to this program" % now)
+            top.setExpanded(True)
+        for c in range(3):
+            self.tree.resizeColumnToContents(c)
+
+        self.all_other = QtWidgets.QCheckBox(
+            "Also include operations of this setup that are in no other NC program (new ones land here)")
+        self.all_other.setChecked(bool(p.AllOtherOperations) if p is not None else False)
+        lay.addWidget(self.tree)
+        lay.addWidget(self.all_other)
+        return w
+
+    def ticked(self):
+        out = []
+        root = self.tree.invisibleRootItem()
+        for i in range(root.childCount()):
+            top = root.child(i)
+            for k in range(top.childCount()):
+                it = top.child(k)
+                if it.checkState(0) == CHECKED:
+                    out.append(self.doc.getObject(it.data(0, ROLE)))
+        return out
+
+    # ---------------- OK / Post
+    def _clicked(self, button):
+        role = self._buttons.buttonRole(button)
+        if role == QtWidgets.QDialogButtonBox.RejectRole:
+            self.reject()
+            return
+        program = self.apply()
+        if program is None:
+            return
+        if button is self.b_post:
+            self.post(program)
+        self.accept()
+
+    def apply(self):
+        doc = self.doc
+        ops = self.ticked()
+        jobs = {_job_of(doc, o) for o in ops}
+        job = jobs.pop() if len(jobs) == 1 else (self.program.Job if self.program is not None else None)
+        if len(jobs) > 0:
+            QtWidgets.QMessageBox.warning(self, "NC Program", "Tick operations of one setup only.")
+            return None
+        if job is None or (not ops and not self.all_other.isChecked()):
+            QtWidgets.QMessageBox.warning(self, "NC Program", "Tick at least one operation (Operations tab).")
+            return None
+        number, name = self.number.value(), self.comment.text().strip().upper()
+        if not name:
+            QtWidgets.QMessageBox.warning(self, "NC Program", "Give the program a comment (its name).")
+            return None
+        if any(q.ProgramNumber == number and q != self.program for q in nc["nc_programs"](doc)):
+            QtWidgets.QMessageBox.warning(self, "NC Program", "O%d is already used by another program." % number)
+            return None
+
+        doc.openTransaction("NC Program")
+        p = self.program
+        if p is None:
+            group = doc.getObject("NC_Programs")
+            if group is None:
+                group = doc.addObject("App::DocumentObjectGroup", "NC_Programs")
+                group.Label = "NC Programs"
+            p = doc.addObject("App::FeaturePython", "NC_O%d" % number)
+            group.addObject(p)
+        nc["ensure_props"](p)
+        for q in nc["nc_programs"](doc):  # an operation belongs to one program
+            if q != p and any(o in ops for o in q.Operations):
+                q.Operations = [o for o in q.Operations if o not in ops]
+        p.ProgramNumber, p.ProgramName = number, name
+        p.Label = "O%d %s" % (number, name)
+        p.Kind = self.kind.currentData()
+        p.Job = job
+        p.Operations = ops
+        p.AllOtherOperations = self.all_other.isChecked()
+        p.FileName = self.filename.text().strip()
+        p.OutputFolder = self.folder.text().strip()
+        p.Extension = self.ext.text().strip() or ".nc"
+        p.OpenInEditor = self.open_editor.isChecked()
+        doc.commitTransaction()
+        doc.recompute()
+        self.program = p
+        return p
+
+    def post(self, p):
+        QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+        try:
+            report = nc["post_programs"](self.doc, [p])
+        finally:
+            QtWidgets.QApplication.restoreOverrideCursor()
+        text = nc["summary_text"](report)
+        FreeCAD.Console.PrintMessage(text + "\n")
+        if report:
+            r = report[0]
+            msg = "%s\n\n%s\n%.1f kB" % (p.Label, r[2], r[3] / 1024)
+            if str(p.Kind) == "load" and r[3] > nc["CONTROL_MEMORY"]:
+                msg += "\n\nToo big for the control (48 KB): set Transfer to 'Drip feed'."
+            QtWidgets.QMessageBox.information(self, "Post", msg)
+
+
+def run():
+    doc = FreeCAD.ActiveDocument
+    if doc is None:
+        return
+    sel = FreeCADGui.Selection.getSelection()
+    progs = [o for o in sel if o in nc["nc_programs"](doc)]
+    if progs:
+        dlg = NCProgramDialog(doc, program=progs[0], parent=FreeCADGui.getMainWindow())
+    else:
+        jobs = [o for o in sel if o in nc["jobs_of"](doc)]
+        ops = [o for o in sel if _job_of(doc, o) is not None]
+        if jobs and not ops:
+            ops = list(jobs[0].Operations.Group)
+        job = _job_of(doc, ops[0]) if ops else (jobs[0] if jobs else (nc["jobs_of"](doc) or [None])[0])
+        dlg = NCProgramDialog(doc, preticked=ops, job_hint=job, parent=FreeCADGui.getMainWindow())
+    dlg.exec_()
+
+
+if __name__ == "__main__":
+    run()

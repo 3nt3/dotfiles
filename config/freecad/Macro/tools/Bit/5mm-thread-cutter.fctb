@@ -1,0 +1,18 @@
+{
+  "attribute": {},
+  "name": "5mm-thread-cutter",
+  "parameter": {
+    "Chipload": "0,0 mm",
+    "Crest": "0,1 mm",
+    "Diameter": "5,0 mm",
+    "Flutes": "0",
+    "Length": "50,0 mm",
+    "Material": "HSS",
+    "NeckDiameter": "3,0 mm",
+    "NeckLength": "20,0 mm",
+    "ShankDiameter": "5,0 mm",
+    "cuttingAngle": "60,0 \u00b0"
+  },
+  "shape": "threadmill.fcstd",
+  "version": 1
+}

@@ -1,0 +1,10 @@
+{
+  "label": "masuter pro",
+  "max-feed": "1000 mm/min",
+  "max-power": "0.5 kW",
+  "max-rpm": "12000",
+  "max-torque": "0.5 Nm",
+  "min-feed": "1 mm/min",
+  "min-rpm": "3000",
+  "peak-torque-rpm": "12000"
+}
