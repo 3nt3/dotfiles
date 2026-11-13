@@ -1,25 +1,40 @@
+# Palette matches waybar/style.css (forest / parchment / brass)
+#   bg #141c17  bg-alt #1a241e  surface #243229  line #3a4d3f
+#   fg #d6cfb4  fg-dim #8f9a85  brass #c2a35a  oxblood #a8504a  forest #7fa37a
+
 sort=-time
 layer=overlay
-background-color=#2e3440
-width=300
-height=110
+anchor=top-right
+outer-margin=8
+margin=6
+width=380
+height=140
+padding=10,14
+
+font=Newsreader Medium 13
+background-color=#141c17
+text-color=#d6cfb4
 border-size=2
-border-color=#88c0d0
-border-radius=0
+border-color=#3a4d3f
+border-radius=2
+progress-color=over #243229
+format=<b>%s</b>\n<span color="#8f9a85">%b</span>
+
 icons=0
 max-icon-size=64
+icon-location=left
 default-timeout=5000
 ignore-timeout=1
-font=MS Sans Serif Regular 12
 
 [urgency=low]
-border-color=#cccccc
+border-color=#3a4d3f
 
 [urgency=normal]
-border-color=#d08770
+border-color=#c2a35a
 
-[urgency=high]
-border-color=#bf616a
+[urgency=critical]
+border-color=#a8504a
+background-color=#1a241e
 default-timeout=0
 
 [category=mpd]
@@ -29,3 +44,4 @@ group-by=category
 [category=song]
 icons=1
 max-icon-size=80
+border-color=#7fa37a
