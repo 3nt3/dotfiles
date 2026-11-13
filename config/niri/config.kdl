@@ -419,10 +419,11 @@ binds {
 
     Mod+Shift+Q repeat=false { close-window; }
 
-    Mod+Left  { focus-column-left; }
-    Mod+Down  { focus-window-down; }
+    // Mod+arrows control media (focus is on Mod+H/J/K/L)
+    Mod+Left  allow-when-locked=true { spawn-sh "playerctl previous"; }
+    Mod+Down  allow-when-locked=true { spawn-sh "playerctl play-pause"; }
     Mod+Up    { focus-window-up; }
-    Mod+Right { focus-column-right; }
+    Mod+Right allow-when-locked=true { spawn-sh "playerctl next"; }
     Mod+H     { focus-column-or-monitor-left; }
     // Mod+J     { focus-window-down; }
     // Mod+K     { focus-window-up; }

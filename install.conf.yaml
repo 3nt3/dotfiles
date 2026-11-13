@@ -69,6 +69,13 @@
     ~/.config/mako:
       create: true
       path: config/mako
+    # song-notify: enable with `systemctl --user enable --now song-notify`
+    ~/.local/bin/song-notify:
+      create: true
+      path: config/song-notify/song-notify
+    ~/.config/systemd/user/song-notify.service:
+      create: true
+      path: config/song-notify/song-notify.service
     # FreeCAD (dev build, user data dir v27-1): macros, add-ons, CAM assets (machines, tools)
     ~/.local/share/FreeCAD/v27-1/Macro:
       create: true

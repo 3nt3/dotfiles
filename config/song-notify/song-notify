@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Show a notification (with album art) whenever the playing track changes.
+# Reuses a single notification so they don't stack up.
+
+cache="${XDG_CACHE_HOME:-$HOME/.cache}/song-notify"
+mkdir -p "$cache"
+
+last=""
+id=0
+
+# US (unit separator) between fields so titles containing any normal char are safe
+playerctl --follow metadata --format \
+  $'{{status}}\x1f{{mpris:trackid}}\x1f{{artist}}\x1f{{title}}\x1f{{album}}\x1f{{mpris:artUrl}}\x1f{{playerName}}' |
+while IFS=$'\x1f' read -r status trackid artist title album art player; do
+  [[ -z "$title" ]] && continue
+  key="$player|$trackid|$artist|$title"
+  [[ "$status" != "Playing" || "$key" == "$last" ]] && continue
+  last="$key"
+
+  icon="audio-x-generic"
+  case "$art" in
+    file://*) icon="${art#file://}" ;;
+    http*://*)
+      f="$cache/$(printf '%s' "$art" | sha1sum | cut -c1-16).jpg"
+      [[ -s "$f" ]] || curl -fsSL --max-time 5 -o "$f" "$art" || rm -f "$f"
+      [[ -s "$f" ]] && icon="$f"
+      ;;
+  esac
+
+  body="$artist"
+  [[ -n "$album" ]] && body+=$'\n'"$album"
+
+  id=$(notify-send -p -r "$id" -a "$player" -c song -i "$icon" -u low -t 5000 \
+         "$title" "$body" 2>/dev/null || echo 0)
+done
